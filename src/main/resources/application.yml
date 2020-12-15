@@ -3,13 +3,12 @@ logging:
   file:
     name: /tmp/playlist/play-list.log
 
-
 spring:
   datasource:
-    url: jdbc:h2:mem:playlist
-#    url: jdbc:mysql://192.168.238.130:3306/bookstore
-#    username: boookstore
-#    password: bookstore
+#    url: jdbc:h2:mem:bookstore
+    url: jdbc:mysql://localhost:3306/bookstore?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: bookstore
+    password: bookstore
   jpa:
     hibernate:
       ddl-auto: validate
