@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+	<changeSet id="init-db-20201215" author="Irek Marszałek">
+		<createTable tableName="category">
+			<column autoIncrement="true" name="id" type="BIGINT">
+				<constraints primaryKey="true"/>
+			</column>
+			<column name="name" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="parentCategory" type="BIGINT">
+				<constraints foreignKeyName="to_category" referencedColumnNames="id" referencedTableName="category"/>
+			</column>
+
+		</createTable>
+	</changeSet>
+
+</databaseChangeLog>

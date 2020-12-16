@@ -1,0 +1,20 @@
+# logging.level.org.springframework.security=DEBUG
+logging:
+  file:
+    name: /tmp/playlist/play-list.log
+
+spring:
+  datasource:
+#    url: jdbc:h2:mem:bookstore
+    url: jdbc:mysql://localhost:3306/bookstore?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: bookstore
+    password: bookstore
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  liquibase:
+    change-log: classpath:db/change-log.xml
