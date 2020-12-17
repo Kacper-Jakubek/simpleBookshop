@@ -9,7 +9,7 @@
 //
 //class ProductMapperTest {
 //    @Test
-//    public void shouldMapCarToDto() {
+//    public void shouldMapProductToDto() {
 //        //given
 //        ProductEntity productEntity = new ProductEntity("IT");
 //

@@ -2,12 +2,10 @@ package pl.sdacademy.bookstore.model;
 
 import pl.sdacademy.bookstore.DTO.ProductDTO;
 
-import java.math.BigDecimal;
-
 public class OrderLine {
     private final int id;
     private final ProductDTO productDTO;
-    private int Quantity;
+    private int quantity;
     private final double price;
     private double netWorth;
 
@@ -20,11 +18,11 @@ public class OrderLine {
     }
 
     public int getQuantity() {
-        return Quantity;
+        return quantity;
     }
 
     public void setQuantity(int quantity) {
-        Quantity = quantity;
+        this.quantity = quantity;
     }
 
     public double getPrice() {
@@ -42,7 +40,7 @@ public class OrderLine {
     public OrderLine(int id, ProductDTO productDTO, int quantity, double price, double netWorth) {
         this.id = id;
         this.productDTO = productDTO;
-        Quantity = quantity;
+        this.quantity = quantity;
         this.price = price;
         this.netWorth = netWorth;
     }
