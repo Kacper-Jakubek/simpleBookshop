@@ -1,4 +1,4 @@
-package pl.sdacademy.bookstore;
+package pl.sdacademy.bookstore.db;
 
 
 import javax.persistence.Entity;
