@@ -10,21 +10,21 @@ import javax.persistence.Id;
 public class AuthorEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer Id;
-    private String AuthorsFname;
-    private String AuthorLname;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long Id;  // powinno być z małej id
+    private String firstName;
+    private String lastName;
 
     public AuthorEntity() {
     }
 
-    public AuthorEntity(Integer Id,String AuthorsFname, String AuthorsLname) {
+    public AuthorEntity(Integer Id, String firstName, String AuthorsLname) {
         this.Id = Id;
-        this.AuthorLname = AuthorsLname;
-        this.AuthorsFname = AuthorsFname;
+        this.lastName = AuthorsLname;
+        this.firstName = firstName;
     }
 
-    public Integer getId() {
+    public long getId() {
         return Id;
     }
 
@@ -36,24 +36,24 @@ public class AuthorEntity {
         Id = id;
     }
 
-    public String getAuthorsFname() {
-        return AuthorsFname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setAuthorsFname(String authorsFname) {
-        AuthorsFname = authorsFname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getAuthorLname() {
-        return AuthorLname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setAuthorLname(String authorLname) {
-        AuthorLname = authorLname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public AuthorEntity(String authorsFname, String authorLname) {
-        AuthorsFname = authorsFname;
-        AuthorLname = authorLname;
+    public AuthorEntity(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 }
