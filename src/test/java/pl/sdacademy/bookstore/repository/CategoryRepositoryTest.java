@@ -10,6 +10,7 @@ import pl.sdacademy.bookstore.db.CategoryEntity;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
@@ -119,7 +120,9 @@ class CategoryRepositoryTest {
     categoryRepository.delete(saved);
     long savedId = saved.getId();
 
-    assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(()->categoryRepository.getById(savedId).orElseThrow(NoSuchElementException::new));
+    Optional<CategoryEntity> found = categoryRepository.getById(savedId);
+
+    assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(()->found.orElseThrow(NoSuchElementException::new));
   }
 
   @Test
@@ -130,8 +133,8 @@ class CategoryRepositoryTest {
     CategoryEntity saved = categoryRepository.save(categoryEntity);
 
     long savedId = saved.getId();
-    categoryRepository.deleteById(savedId);
+    Optional<CategoryEntity> found = categoryRepository.getById(savedId);
 
-    assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(()->categoryRepository.getById(savedId).orElseThrow(NoSuchElementException::new));
+    assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(()->found.orElseThrow(NoSuchElementException::new));
   }
 }

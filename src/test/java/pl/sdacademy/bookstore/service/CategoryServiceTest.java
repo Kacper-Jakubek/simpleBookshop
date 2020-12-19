@@ -33,7 +33,7 @@ class CategoryServiceTest {
     category.setLeaf(false);
 
     Category parentCategory = new Category();
-    parentCategory.setName("Ksiązki");
+    parentCategory.setName("Książki");
     parentCategory.setLeaf(false);
     Category savedParentCategory = categoryService.addCategory(parentCategory);
 
