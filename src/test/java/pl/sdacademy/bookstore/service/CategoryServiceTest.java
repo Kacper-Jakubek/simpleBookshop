@@ -23,7 +23,7 @@ class CategoryServiceTest {
 
   @BeforeEach
   void clearBeforeEach(){
-    categoryRepository.truncate();
+    categoryRepository.deleteAll();
   }
 
   @Test

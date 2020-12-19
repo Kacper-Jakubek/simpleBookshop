@@ -1,0 +1,21 @@
+# logging.level.org.springframework.security=DEBUG
+logging:
+  file:
+    name: /tmp/playlist/play-list.log
+
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:bookstore
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  liquibase:
+    enabled: false
+
