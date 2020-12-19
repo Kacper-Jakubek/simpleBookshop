@@ -28,7 +28,7 @@
 				<constraints nullable="false" />
 			</column>
 			<column name="AuthorLname" type="VARCHAR(255)">
-				<constraints nullable="false" />
+				 <constraints nullable="false" />
 			</column>
 		</createTable>
 	</changeSet>
