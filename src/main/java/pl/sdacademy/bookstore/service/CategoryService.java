@@ -17,6 +17,8 @@ import pl.sdacademy.bookstore.model.dto.Category;
 import pl.sdacademy.bookstore.model.mapper.CategoryMapper;
 import pl.sdacademy.bookstore.repository.CategoryRepository;
 
+import java.util.Optional;
+
 @Service
 public class CategoryService {
   CategoryMapper categoryMapper = Mappers.getMapper(CategoryMapper.class);
@@ -27,10 +29,49 @@ public class CategoryService {
     this.categoryRepository = categoryRepository;
   }
 
+
+  /**
+   * Add a new category.
+   * @param category DTO instance
+   * @return newly added DTO category
+   *
+   */
   public Category addCategory(Category category){
-    //TODO dorób validację
+    //TODO: dorób validację dodawania kategorii
     CategoryEntity categoryEntity = categoryMapper.map(category);
     CategoryEntity savedCategory = categoryRepository.save(categoryEntity);
     return categoryMapper.map(savedCategory);
   }
+
+  /**
+   * Change existing category.
+   * @param category DTO instance
+   * @return changed DTO category
+   *
+   */
+  public Category changeCategory(Category category){
+    //TODO: dorób validację zmiany kategorii
+    CategoryEntity categoryEntity = categoryMapper.map(category);
+    CategoryEntity savedCategory = categoryRepository.update(categoryEntity);
+    return categoryMapper.map(savedCategory);
+  }
+
+  /**
+   * Delete existing category.
+   * @param category DTO instance
+   * @return void
+   *
+   */
+  public void deleteCategory(Category category){
+    //TODO: dorób validację usuwania kategorii
+    CategoryEntity categoryEntity = categoryMapper.map(category);
+    categoryRepository.delete(categoryEntity);
+  }
+
+  public Optional<Category> findById(long id){
+    Optional<CategoryEntity> found = categoryRepository.getById(id);
+
+    return found.map(categoryEntity -> categoryMapper.map(categoryEntity));
+  }
+
 }
