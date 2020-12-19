@@ -1,6 +1,13 @@
 package pl.sdacademy.bookstore.repository;
-/* By IM */
-/*Category CRUD*/
+
+/**
+ * A class that that collects methods that allows to access CategoryEntity
+ *
+ * <p>An <code>CategoryRepository</code> instance is supposed to be a set
+ * of methods created to provide an access to CategoryEntity
+ *
+ * @author Irek Marszałek
+ */
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

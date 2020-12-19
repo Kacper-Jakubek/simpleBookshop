@@ -1,6 +1,13 @@
 package pl.sdacademy.bookstore.service;
-/* By IM */
-/*Category service tests*/
+
+/**
+ * A class that perform integration test of CategoryService
+ *
+ * <p>An <code>CategoryRepositoryTest</code> check connection witt H2 database
+ * an tests all method being in CategoryService
+ *
+ * @author Irek Marszałek
+ */
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

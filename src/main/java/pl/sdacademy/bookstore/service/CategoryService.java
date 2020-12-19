@@ -1,6 +1,13 @@
 package pl.sdacademy.bookstore.service;
-/* By IM */
-/*Functionality necessary to serve Categories*/
+
+/**
+ * A class that that collects function to operate on a Category
+ *
+ * <p>An <code>CategoryService</code> instance is supposed to be a set
+ * methods that allows to work with category
+ *
+ * @author Irek Marszałek
+ */
 
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;

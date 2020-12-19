@@ -1,6 +1,16 @@
 package pl.sdacademy.bookstore.model.dto;
-/* By IM */
-/*Books category dto*/
+
+/**
+ * A class that represents DTO for category from db.CategoryEntity
+ *
+ * <p>An <code>Category</code> instance is supposed to be a copy
+ * of <code>CategoryEntity</code> and do not contain entity annotation
+ * BTW. Kiedyś się nauczę pisać Javadoc, ale to nie teraz ;)
+ *
+ * @see pl.sdacademy.bookstore.db.CategoryEntity
+ *
+ * @author Irek Marszałek
+ */
 
 public class Category {
   private long id;
