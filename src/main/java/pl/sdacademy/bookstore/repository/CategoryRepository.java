@@ -1,14 +1,16 @@
 package pl.sdacademy.bookstore.repository;
+/* By IM */
+/*Category CRUD*/
 
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import pl.sdacademy.bookstore.db.CategoryEntity;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
 
-@Data
 @Repository
 public class CategoryRepository {
   private final EntityManager entityManager;
@@ -19,8 +21,48 @@ public class CategoryRepository {
   }
 
   @Transactional
-  public CategoryEntity save(CategoryEntity category){
-    entityManager.persist(category);
-    return category;
+  public CategoryEntity save(CategoryEntity categoryEntity){
+    entityManager.persist(categoryEntity);
+    return categoryEntity;
+  }
+
+  @Transactional
+  public CategoryEntity update(CategoryEntity categoryEntity){
+    entityManager.merge(categoryEntity);
+    return categoryEntity;
+  }
+
+  @Transactional
+  public Optional<CategoryEntity> getById(long id){
+    return Optional.ofNullable(entityManager.find(CategoryEntity.class, id));
+  }
+
+  @Transactional
+  public List<CategoryEntity> findAll(){
+    return entityManager.createQuery("select c from category c", CategoryEntity.class).getResultList();
+  }
+
+  @Transactional
+  public void delete(CategoryEntity categoryEntity){
+    entityManager.remove(entityManager.contains(categoryEntity)?categoryEntity:entityManager.merge(categoryEntity));
+  }
+
+  @Transactional
+  public void deleteById(long id){
+    entityManager.createQuery("delete from category c where c.id = :id")
+            .setParameter("id", id)
+            .executeUpdate();
+  }
+
+  @Transactional
+  public void deleteAll(){
+    entityManager.createQuery("delete from category c")
+            .executeUpdate();
+  }
+
+  @Transactional
+  public void truncate(){
+    entityManager.createNativeQuery("truncate table category")
+            .executeUpdate();
   }
 }
