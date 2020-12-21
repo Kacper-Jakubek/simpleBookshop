@@ -1,6 +1,13 @@
 package pl.sdacademy.bookstore.service;
-/* By IM */
-/*Functionality necessary to serve Categories*/
+
+/**
+ * A class that that collects function to operate on a Category
+ *
+ * <p>An <code>CategoryService</code> instance is supposed to be a set
+ * methods that allows to work with category
+ *
+ * @author Irek Marszałek
+ */
 
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +16,8 @@ import pl.sdacademy.bookstore.db.CategoryEntity;
 import pl.sdacademy.bookstore.model.dto.Category;
 import pl.sdacademy.bookstore.model.mapper.CategoryMapper;
 import pl.sdacademy.bookstore.repository.CategoryRepository;
+
+import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -20,10 +29,49 @@ public class CategoryService {
     this.categoryRepository = categoryRepository;
   }
 
+
+  /**
+   * Add a new category.
+   * @param category DTO instance
+   * @return newly added DTO category
+   *
+   */
   public Category addCategory(Category category){
-    //TODO dorób validację
+    //TODO: dorób validację dodawania kategorii
     CategoryEntity categoryEntity = categoryMapper.map(category);
     CategoryEntity savedCategory = categoryRepository.save(categoryEntity);
     return categoryMapper.map(savedCategory);
   }
+
+  /**
+   * Change existing category.
+   * @param category DTO instance
+   * @return changed DTO category
+   *
+   */
+  public Category changeCategory(Category category){
+    //TODO: dorób validację zmiany kategorii
+    CategoryEntity categoryEntity = categoryMapper.map(category);
+    CategoryEntity savedCategory = categoryRepository.update(categoryEntity);
+    return categoryMapper.map(savedCategory);
+  }
+
+  /**
+   * Delete existing category.
+   * @param category DTO instance
+   * @return void
+   *
+   */
+  public void deleteCategory(Category category){
+    //TODO: dorób validację usuwania kategorii
+    CategoryEntity categoryEntity = categoryMapper.map(category);
+    categoryRepository.delete(categoryEntity);
+  }
+
+  public Optional<Category> findById(long id){
+    Optional<CategoryEntity> found = categoryRepository.getById(id);
+
+    return found.map(categoryEntity -> categoryMapper.map(categoryEntity));
+  }
+
 }

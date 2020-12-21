@@ -1,6 +1,13 @@
 package pl.sdacademy.bookstore.repository;
-/* By IM */
-/*Category repository tests*/
+
+/**
+ * A class that perform integration test of CategoryRepository
+ *
+ * <p>An <code>CategoryRepositoryTest</code> check connection witt H2 database
+ * an tests all method being in CategoryRepository
+ *
+ * @author Irek Marszałek
+ */
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +17,7 @@ import pl.sdacademy.bookstore.db.CategoryEntity;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
@@ -119,7 +127,9 @@ class CategoryRepositoryTest {
     categoryRepository.delete(saved);
     long savedId = saved.getId();
 
-    assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(()->categoryRepository.getById(savedId).orElseThrow(NoSuchElementException::new));
+    Optional<CategoryEntity> found = categoryRepository.getById(savedId);
+
+    assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(()->found.orElseThrow(NoSuchElementException::new));
   }
 
   @Test
@@ -131,7 +141,8 @@ class CategoryRepositoryTest {
 
     long savedId = saved.getId();
     categoryRepository.deleteById(savedId);
+    Optional<CategoryEntity> found = categoryRepository.getById(savedId);
 
-    assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(()->categoryRepository.getById(savedId).orElseThrow(NoSuchElementException::new));
+    assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(()->found.orElseThrow(NoSuchElementException::new));
   }
 }
