@@ -140,6 +140,7 @@ class CategoryRepositoryTest {
     CategoryEntity saved = categoryRepository.save(categoryEntity);
 
     long savedId = saved.getId();
+    categoryRepository.deleteById(savedId);
     Optional<CategoryEntity> found = categoryRepository.getById(savedId);
 
     assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(()->found.orElseThrow(NoSuchElementException::new));

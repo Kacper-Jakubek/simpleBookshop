@@ -11,7 +11,10 @@ import pl.sdacademy.bookstore.model.dto.Category;
 import pl.sdacademy.bookstore.model.mapper.CategoryMapper;
 import pl.sdacademy.bookstore.repository.CategoryRepository;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,14 +25,20 @@ class CategoryServiceWithMockTest {
   private static final CategoryEntity PARENT_CATEGORY_PARENT = null;
   private static final boolean PARENT_LEAF = true;
 
-  private static final CategoryEntity PARENT_CATEGORY = new CategoryEntity(PARENT_CATEGORY_ID, PARENT_CATEGORY_NAME, PARENT_CATEGORY_PARENT, PARENT_LEAF);
+  private static final CategoryEntity PARENT_CATEGORY = new CategoryEntity(PARENT_CATEGORY_ID
+          , PARENT_CATEGORY_NAME
+          , PARENT_CATEGORY_PARENT
+          , PARENT_LEAF);
 
   private static final long CATEGORY_ID = 1;
   private static final String CATEGORY_NAME = "Książki";
   private static final CategoryEntity CATEGORY_PARENT = PARENT_CATEGORY;
   private static final boolean CATEGORY_LEAF = true;
   
-  private static final CategoryEntity CATEGORY_ENTITY = new CategoryEntity(CATEGORY_ID, CATEGORY_NAME, CATEGORY_PARENT, CATEGORY_LEAF);
+  private static final CategoryEntity CATEGORY_ENTITY = new CategoryEntity(CATEGORY_ID
+          , CATEGORY_NAME
+          , CATEGORY_PARENT
+          , CATEGORY_LEAF);
 
   CategoryMapper categoryMapper = Mappers.getMapper(CategoryMapper.class);
 
@@ -41,9 +50,55 @@ class CategoryServiceWithMockTest {
 
   @Test
   void shouldAddNewCategory() {
-    when(categoryRepository.save(CATEGORY_ENTITY)).thenReturn(CATEGORY_ENTITY);
-
+    when(categoryRepository.save(any())).thenReturn(CATEGORY_ENTITY);
     Category saved = categoryService.addCategory(categoryMapper.map(CATEGORY_ENTITY));
+
     assertThat(saved.getId()).isEqualTo(CATEGORY_ENTITY.getId());
+    verify(categoryRepository).save(any());
+    verifyNoMoreInteractions(categoryRepository);
+  }
+
+  @Test
+  void shouldChangeExistingCategory() {
+    when(categoryRepository.save(any())).thenReturn(CATEGORY_ENTITY);
+    Category saved = categoryService.addCategory(categoryMapper.map(CATEGORY_ENTITY));
+
+    CATEGORY_ENTITY.setLeaf(true);
+    CATEGORY_ENTITY.setName("Horrory");
+    CATEGORY_ENTITY.setParentCategory(null);
+
+    when(categoryRepository.update(any())).thenReturn(CATEGORY_ENTITY);
+    Category updated = categoryService.changeCategory(saved);
+
+    assertThat(updated.getId()).isEqualTo(CATEGORY_ENTITY.getId());
+    assertThat(updated.getName()).isEqualTo(CATEGORY_ENTITY.getName());
+    assertThat(updated.isLeaf()).isEqualTo(CATEGORY_ENTITY.isLeaf());
+    assertThat(updated.getParentCategory()).isNull();
+
+    verify(categoryRepository).save(any());
+    verify(categoryRepository).update(any());
+
+    verifyNoMoreInteractions(categoryRepository);
+  }
+
+  @Test
+  void shouldDeleteCategory(){
+    when(categoryRepository.save(any())).thenReturn(CATEGORY_ENTITY);
+    Category saved = categoryService.addCategory(categoryMapper.map(CATEGORY_ENTITY));
+
+    doNothing().when(categoryRepository).delete(any());
+    categoryService.deleteCategory(saved);
+    long savedId = saved.getId();
+
+    when(categoryRepository.getById(savedId)).thenReturn(Optional.empty());
+    Optional<Category> found = categoryService.findById(savedId);
+
+    assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(()->found.orElseThrow(NoSuchElementException::new));
+
+    verify(categoryRepository).save(any());
+    verify(categoryRepository).delete(any());
+    verify(categoryRepository).getById(savedId);
+
+    verifyNoMoreInteractions(categoryRepository);
   }
 }
