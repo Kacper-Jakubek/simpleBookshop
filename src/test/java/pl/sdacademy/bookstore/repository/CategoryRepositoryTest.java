@@ -145,4 +145,41 @@ class CategoryRepositoryTest {
 
     assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(()->found.orElseThrow(NoSuchElementException::new));
   }
+
+  @Test
+  void shouldFindOneChild() {
+    CategoryEntity parentCategoryEntity = new CategoryEntity();
+    parentCategoryEntity.setName("Książki");
+    parentCategoryEntity.setLeaf(false);
+    CategoryEntity parentSaved = categoryRepository.save(parentCategoryEntity);
+
+    parentSaved.setParentCategory(parentSaved);
+    parentSaved = categoryRepository.update(parentSaved);
+    long parentSavedId = parentSaved.getId();
+
+    CategoryEntity categoryEntity = new CategoryEntity();
+    categoryEntity.setName("Horror");
+    categoryEntity.setParentCategory(parentSaved);
+    categoryEntity.setLeaf(true);
+    categoryRepository.save(categoryEntity);
+
+    List<CategoryEntity> children = categoryRepository.findAllChildCategories(parentSavedId);
+
+    //Two because root in parentCategory has assigned himself
+    assertThat(children.size()).isEqualTo(2);
+  }
+
+  @Test
+  void shouldReturnEmptyChildrenList() {
+    CategoryEntity parentCategoryEntity = new CategoryEntity();
+    parentCategoryEntity.setName("Książki");
+    parentCategoryEntity.setLeaf(false);
+    CategoryEntity parentSaved = categoryRepository.save(parentCategoryEntity);
+
+    long parentSavedId = parentSaved.getId();
+
+    List<CategoryEntity> children = categoryRepository.findAllChildCategories(parentSavedId);
+
+    assertThat(children).isEmpty();
+  }
 }

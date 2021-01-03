@@ -1,5 +1,10 @@
 package pl.sdacademy.bookstore.model.dto;
 
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotNull;
+
 /**
  * A class that represents DTO for category from db.CategoryEntity
  *
@@ -14,19 +19,16 @@ package pl.sdacademy.bookstore.model.dto;
 
 public class Category {
   private long id;
+
+  @NotNull(message = "Category name cannot be empty")
+  @Length(min =3, message = "Category name cannot be shorter than 3 chars")
   private String name;
+
+  @NotNull(message = "Parent category cannot be null")
   private Category parentCategory;
+
+  @NotNull(message = "It must be marked if category is a leaf or not")
   boolean leaf;
-
-  public Category(long id, String name, Category parentCategory, boolean leaf) {
-    this.id = id;
-    this.name = name;
-    this.parentCategory = parentCategory;
-    this.leaf = leaf;
-  }
-
-  public Category() {
-  }
 
   public long getId() {
     return id;

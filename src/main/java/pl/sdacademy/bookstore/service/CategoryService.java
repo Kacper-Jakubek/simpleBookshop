@@ -17,6 +17,7 @@ import pl.sdacademy.bookstore.model.dto.Category;
 import pl.sdacademy.bookstore.model.mapper.CategoryMapper;
 import pl.sdacademy.bookstore.repository.CategoryRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,7 +30,6 @@ public class CategoryService {
     this.categoryRepository = categoryRepository;
   }
 
-
   /**
    * Add a new category.
    * @param category DTO instance
@@ -39,8 +39,8 @@ public class CategoryService {
   public Category addCategory(Category category){
     //TODO: dorób validację dodawania kategorii
     CategoryEntity categoryEntity = categoryMapper.map(category);
-    CategoryEntity savedCategory = categoryRepository.save(categoryEntity);
-    return categoryMapper.map(savedCategory);
+    CategoryEntity saveCategory = categoryRepository.save(categoryEntity);
+    return categoryMapper.map(saveCategory);
   }
 
   /**
@@ -68,10 +68,26 @@ public class CategoryService {
     categoryRepository.delete(categoryEntity);
   }
 
+  /**
+   * Looking for Category having provided id.
+   * @param id category id
+   * @return empty optional if could not find, optional with category if managed to find
+   *
+   */
   public Optional<Category> findById(long id){
     Optional<CategoryEntity> found = categoryRepository.getById(id);
-
     return found.map(categoryEntity -> categoryMapper.map(categoryEntity));
   }
+
+  /**
+   * Looking for children categories.
+   * @param id category id
+   * @return List of children categories
+   *
+   */
+  public List<Category> findChildren(long id){
+    return categoryMapper.map(categoryRepository.findAllChildCategories(id));
+  }
+
 
 }
