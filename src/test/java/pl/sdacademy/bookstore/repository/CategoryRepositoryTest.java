@@ -18,10 +18,12 @@ import pl.sdacademy.bookstore.db.CategoryEntity;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 class CategoryRepositoryTest {
@@ -164,9 +166,12 @@ class CategoryRepositoryTest {
     categoryRepository.save(categoryEntity);
 
     List<CategoryEntity> children = categoryRepository.findAllChildCategories(parentSavedId);
+    List<CategoryEntity> childrenWithoutRoot = children
+            .stream()
+            .filter(child -> child.getId() != child.getParentCategory().getId())
+            .collect(Collectors.toList());
 
-    //Two because root in parentCategory has assigned himself
-    assertThat(children.size()).isEqualTo(2);
+    assertThat(childrenWithoutRoot.size()).isEqualTo(1);
   }
 
   @Test
@@ -176,10 +181,16 @@ class CategoryRepositoryTest {
     parentCategoryEntity.setLeaf(false);
     CategoryEntity parentSaved = categoryRepository.save(parentCategoryEntity);
 
+    parentSaved.setParentCategory(parentSaved);
+    parentSaved = categoryRepository.update(parentSaved);
     long parentSavedId = parentSaved.getId();
 
     List<CategoryEntity> children = categoryRepository.findAllChildCategories(parentSavedId);
+    List<CategoryEntity> childrenWithoutRoot = children
+            .stream()
+            .filter(child -> child.getId() != child.getParentCategory().getId())
+            .collect(Collectors.toList());
 
-    assertThat(children).isEmpty();
+    assertThat(childrenWithoutRoot).isEmpty();
   }
 }
