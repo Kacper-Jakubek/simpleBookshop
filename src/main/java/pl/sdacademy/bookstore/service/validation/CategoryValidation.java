@@ -9,21 +9,14 @@ package pl.sdacademy.bookstore.service.validation;
  * @author Irek Marszałek
  */
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.sdacademy.bookstore.model.dto.Category;
-import pl.sdacademy.bookstore.service.CategoryService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class CategoryValidation {
-  private final CategoryService categoryService;
-
-  @Autowired
-  public CategoryValidation(CategoryService categoryService) {
-    this.categoryService = categoryService;
-  }
 
   List<String> checkIfNewNameIsCorrect(Category category){
     List<String> errorMessages = new ArrayList<>();
@@ -63,5 +56,4 @@ public class CategoryValidation {
     }
     return errorMessages;
   }
-
 }

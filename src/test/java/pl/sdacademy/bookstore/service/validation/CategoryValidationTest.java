@@ -12,8 +12,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 class CategoryValidationTest {
 
-  @Autowired
-  Category category;
+  Category category = new Category();
+
   @Autowired
   CategoryValidation categoryValidation;
 
@@ -55,7 +55,6 @@ class CategoryValidationTest {
     category.setId(1);
     category.setName("Name");
     category.setParentCategory(category);
-    //category.setLeaf(true);
     List<String> errorMessages = categoryValidation.checkIfCanBeCreated(category);
 
     assertThat(errorMessages).isEmpty();

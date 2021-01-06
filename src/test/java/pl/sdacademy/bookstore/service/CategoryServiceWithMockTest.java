@@ -106,18 +106,11 @@ class CategoryServiceWithMockTest {
 
   @Test
   void shouldFindTwoChildren(){
-    when(categoryRepository.save(any())).thenReturn(PARENT_CATEGORY);
-    Category parentSaved = categoryService.addCategory(categoryMapper.map(PARENT_CATEGORY));
-
-    when(categoryRepository.save(any())).thenReturn(CATEGORY_ENTITY);
-    categoryService.addCategory(categoryMapper.map(CATEGORY_ENTITY));
-
-    long parentSavedId = parentSaved.getId();
     List<CategoryEntity> returnedCategories = new ArrayList<>();
     returnedCategories.add(CATEGORY_ENTITY);
     returnedCategories.add(PARENT_CATEGORY);
 
-    when(categoryRepository.findAllChildCategories(parentSavedId)).thenReturn(returnedCategories);
+    when(categoryRepository.findAllChildCategories(PARENT_CATEGORY_ID)).thenReturn(returnedCategories);
 
     List<Category> foundedCategories = categoryService.findChildren(PARENT_CATEGORY.getId());
     assertThat(foundedCategories.size()).isEqualTo(2);
