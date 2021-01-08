@@ -1,0 +1,121 @@
+package pl.sdacademy.bookstore.db;
+
+import org.hibernate.validator.constraints.URL;
+
+import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.*;
+
+
+@Entity(name ="product")
+public class ProductEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    private String title;
+    private String description;
+    private BigInteger price;
+    private boolean isAvailable;
+    @URL
+    private String miniature;
+
+    @ManyToMany
+    @JoinTable(name = "category_to_product",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<CategoryEntity> categories = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "category_to_product",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<AuthorEntity> authors = new HashSet<>();
+
+
+    public ProductEntity(long id, String title, String description,
+                         BigInteger price, boolean isAvailable,
+                         @URL String miniature, Set<CategoryEntity> categories,
+                         Set<AuthorEntity> authors) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.price = price;
+        this.isAvailable = isAvailable;
+        this.miniature = miniature;
+        this.categories = categories;
+        this.authors = authors;
+    }
+
+    public ProductEntity() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public BigInteger getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigInteger price) {
+        this.price = price;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
+    public String getMiniature() {
+        return miniature;
+    }
+
+    public void setMiniature(String miniature) {
+        this.miniature = miniature;
+    }
+
+    public Set<CategoryEntity> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<CategoryEntity> categories) {
+        this.categories = categories;
+    }
+
+    public Set<AuthorEntity> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(Set<AuthorEntity> authors) {
+        this.authors = authors;
+    }
+}
