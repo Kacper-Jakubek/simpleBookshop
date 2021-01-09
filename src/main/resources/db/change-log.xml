@@ -62,33 +62,35 @@
                 <constraints nullable="false" />
             </column>
             <column name="product_description" type="VARCHAR(255)">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
             <column name="product_miniature" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="product_price" type="BIGINT">
                 <constraints nullable="false" />
             </column>
             <column name="product_availability" type="BOOLEAN">
-                <constraints nullable="false" />
+                <constraints nullable="false"  />
             </column>
-            <column name="product_categories" type="BIGINT">
-                <constraints foreignKeyName="to_category" referencedColumnNames="id" referencedTableName="category"/>
+        </createTable>
+
+        <createTable tableName="category_to_product">
+            <column name="category_id" type="BIGINT">
+                <constraints foreignKeyName="product_to_category" referencedColumnNames="id" referencedTableName="category" />
             </column>
-            <column name="product_authors" type="BIGINT">
-                <constraints foreignKeyName="to_author" referencedColumnNames="id" referencedTableName="author"/>
+            <column name="product_id" type="BIGINT">
+                <constraints foreignKeyName="category_to_product" referencedColumnNames="id" referencedTableName="product" />
             </column>
         </createTable>
     </changeSet>
-
-    <changeSet id="author-table-modify" author="Marcin Marczyk">
-        <createTable tableName="category_to_product">
-            <column name="category_id" type="BIGINT">
-                <constraints foreignKeyName="to_category" referencedColumnNames="id" referencedTableName="category" />
+    <changeSet id="init-db-20210109" author="Anna Ksiazek">
+        <createTable tableName="author_to_product">
+            <column name="author_id" type="BIGINT">
+                <constraints foreignKeyName="product_to_author" referencedColumnNames="id" referencedTableName="author" />
             </column>
             <column name="product_id" type="BIGINT">
-                <constraints foreignKeyName="to_product" referencedColumnNames="id" referencedTableName="product" />
+                <constraints foreignKeyName="author_to_product" referencedColumnNames="id" referencedTableName="product" />
             </column>
         </createTable>
     </changeSet>

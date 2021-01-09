@@ -2,12 +2,10 @@ package pl.sdacademy.bookstore.db;
 
 import org.hibernate.validator.constraints.URL;
 
+import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
-import javax.persistence.*;
 
 
 @Entity(name ="product")
@@ -31,9 +29,9 @@ public class ProductEntity {
     private Set<CategoryEntity> categories = new HashSet<>();
 
     @ManyToMany
-    @JoinTable(name = "category_to_product",
+    @JoinTable(name = "author_to_product",
             joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
+            inverseJoinColumns = @JoinColumn(name = "author_id")
     )
     private Set<AuthorEntity> authors = new HashSet<>();
 
