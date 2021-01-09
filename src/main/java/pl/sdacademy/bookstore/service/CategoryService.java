@@ -1,9 +1,8 @@
 package pl.sdacademy.bookstore.service;
-
 /**
- * A class that that collects function to operate on a Category
+ * A class that that collects function to operate on a Category.
  *
- * <p>An <code>CategoryService</code> instance is supposed to be a set
+ * <p>An <code>CategoryService</code> instance is supposed to be a set of
  * methods that allows to work with category
  *
  * @author Irek Marszałek
@@ -16,7 +15,6 @@ import pl.sdacademy.bookstore.db.CategoryEntity;
 import pl.sdacademy.bookstore.model.dto.Category;
 import pl.sdacademy.bookstore.model.mapper.CategoryMapper;
 import pl.sdacademy.bookstore.repository.CategoryRepository;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +56,7 @@ public class CategoryService {
 
   /**
    * Delete existing category.
+   *
    * @param category DTO instance
    * @return void
    *
@@ -82,12 +81,21 @@ public class CategoryService {
   /**
    * Looking for children categories.
    * @param id category id
-   * @return List of children categories
+   * @return List of children categories (without grandchildren etc, only children)
    *
    */
   public List<Category> findChildren(long id){
-    return categoryMapper.map(categoryRepository.findAllChildCategories(id));
+    return categoryMapper.map(categoryRepository.findAllChildren(id));
   }
 
+  /**
+   * Counting children of provided category.
+   * @param id category id
+   * @return Number (int) of founded children (but without grandchildren, don't forget it ;) )
+   *
+   */
+  public int countChildren(long id){
+    return categoryRepository.countChildren(id);
+  }
 
 }

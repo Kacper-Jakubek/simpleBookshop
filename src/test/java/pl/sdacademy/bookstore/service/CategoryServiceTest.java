@@ -39,18 +39,17 @@ class CategoryServiceTest {
 
   @Test
   void shouldAddNewCategory() {
-    Category category = new Category();
-    category.setName("Historyczne");
-    category.setLeaf(false);
-
     Category parentCategory = new Category();
     parentCategory.setName("Książki");
     parentCategory.setLeaf(false);
     Category savedParentCategory = categoryService.addCategory(parentCategory);
 
+    Category category = new Category();
+    category.setName("Historyczne");
+    category.setLeaf(false);
     category.setParentCategory(savedParentCategory);
-
     Category saved = categoryService.addCategory(category);
+
     long savedID = saved.getId();
 
     CategoryEntity found = categoryRepository.getById(savedID).orElse(new CategoryEntity());

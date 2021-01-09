@@ -1,7 +1,5 @@
 package pl.sdacademy.bookstore.model.dto;
 
-import org.springframework.stereotype.Component;
-
 /**
  * A class that represents DTO for category from db.CategoryEntity
  *

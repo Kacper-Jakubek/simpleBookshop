@@ -18,16 +18,21 @@ import java.util.List;
 @Component
 public class CategoryValidation {
 
+  private static final String CATEGORY_CANNOT_BE_NULL = "Category cannot be null";
+  private static final String CATEGORY_NAME_CANNOT_BE_NULL = "Category name cannot be null";
+  private static final String CATEGORY_NAME_CANNOT_BE_SHORTER_THAN_3_CHARS = "Category name cannot be shorter than 3 chars";
+  private static final String CATEGORY_PARENT_CANNOT_BE_NULL = "Category parent cannot be null";
+
   List<String> checkIfNewNameIsCorrect(Category category){
     List<String> errorMessages = new ArrayList<>();
     if (category == null){
-      errorMessages.add("Category cannot be null");
+      errorMessages.add(CATEGORY_CANNOT_BE_NULL);
     }else {
       if(category.getName() == null){
-        errorMessages.add("Category name cannot be null");
+        errorMessages.add(CATEGORY_NAME_CANNOT_BE_NULL);
       }else {
         if (category.getName().length() < 3) {
-          errorMessages.add("Category name cannot be shorter than 3 chars");
+          errorMessages.add(CATEGORY_NAME_CANNOT_BE_SHORTER_THAN_3_CHARS);
         }
       }
     }
@@ -37,10 +42,10 @@ public class CategoryValidation {
   List<String> checkIfParentCategoryIsCorrect(Category category){
     List<String> errorMessages = new ArrayList<>();
     if (category == null){
-      errorMessages.add("Category cannot be null");
+      errorMessages.add(CATEGORY_CANNOT_BE_NULL);
     }else {
       if(category.getParentCategory() == null){
-        errorMessages.add("Category parent cannot be null");
+        errorMessages.add(CATEGORY_PARENT_CANNOT_BE_NULL);
       }
     }
     return errorMessages;

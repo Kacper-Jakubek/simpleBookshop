@@ -68,10 +68,19 @@ public class CategoryRepository {
   }
 
   @Transactional
-  public List<CategoryEntity> findAllChildCategories(long id){
+  public List<CategoryEntity> findAllChildren(long id){
     return entityManager
             .createQuery("select c from category c where c.parentCategory.id = :id", CategoryEntity.class)
             .setParameter("id", id)
             .getResultList();
+  }
+
+  @Transactional
+  public int countChildren(long id){
+    return entityManager
+            .createQuery("select count(c) from category c where c.parentCategory.id = :id", Long.class)
+            .setParameter("id",id)
+            .getSingleResult()
+            .intValue();
   }
 }

@@ -22,18 +22,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceWithMockTest {
-  private static final long PARENT_CATEGORY_ID = 2;
+  private static final long PARENT_CATEGORY_ID = 1;
   private static final String PARENT_CATEGORY_NAME = "Książki";
   private static final CategoryEntity PARENT_CATEGORY_PARENT = null;
-  private static final boolean PARENT_LEAF = true;
+  private static final boolean PARENT_LEAF = false;
 
-  private static final CategoryEntity PARENT_CATEGORY = new CategoryEntity(PARENT_CATEGORY_ID
+  private static final CategoryEntity PARENT_CATEGORY = new CategoryEntity(
+          PARENT_CATEGORY_ID
           , PARENT_CATEGORY_NAME
           , PARENT_CATEGORY_PARENT
           , PARENT_LEAF);
 
-  private static final long CATEGORY_ID = 1;
-  private static final String CATEGORY_NAME = "Książki";
+  private static final long CATEGORY_ID = 2;
+  private static final String CATEGORY_NAME = "Horror";
   private static final CategoryEntity CATEGORY_PARENT = PARENT_CATEGORY;
   private static final boolean CATEGORY_LEAF = true;
   
@@ -108,12 +109,11 @@ class CategoryServiceWithMockTest {
   void shouldFindTwoChildren(){
     List<CategoryEntity> returnedCategories = new ArrayList<>();
     returnedCategories.add(CATEGORY_ENTITY);
-    returnedCategories.add(PARENT_CATEGORY);
 
-    when(categoryRepository.findAllChildCategories(PARENT_CATEGORY_ID)).thenReturn(returnedCategories);
+    when(categoryRepository.findAllChildren(PARENT_CATEGORY_ID)).thenReturn(returnedCategories);
 
     List<Category> foundedCategories = categoryService.findChildren(PARENT_CATEGORY.getId());
-    assertThat(foundedCategories.size()).isEqualTo(2);
+    assertThat(foundedCategories.size()).isEqualTo(1);
   }
 
   @Test
@@ -124,9 +124,17 @@ class CategoryServiceWithMockTest {
     long parentSavedId = parentSaved.getId();
     List<CategoryEntity> returnedCategories = new ArrayList<>();
 
-    when(categoryRepository.findAllChildCategories(parentSavedId)).thenReturn(returnedCategories);
+    when(categoryRepository.findAllChildren(parentSavedId)).thenReturn(returnedCategories);
 
     List<Category> foundedCategories = categoryService.findChildren(PARENT_CATEGORY.getId());
     assertThat(foundedCategories).isEmpty();
+  }
+
+  @Test
+  void shouldCountOneChildren(){
+    when(categoryRepository.countChildren(PARENT_CATEGORY_ID)).thenReturn(1);
+    int countedChildren = categoryService.countChildren(PARENT_CATEGORY_ID);
+
+    assertThat(countedChildren).isEqualTo(1);
   }
 }
