@@ -7,21 +7,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CartCache {
-    Map<Integer, Cart> CartsInMemory = new HashMap();
-    private static int cacheCount;
+    Map<String, Cart> CartsInMemory = new HashMap();
+    private String sessionID;
 
 
 
-    public Map<Integer, Cart> storeCart(Cart cart){
-        CartsInMemory.put(cacheCount++,cart);
-        return CartsInMemory;
+    public boolean storeCart(Cart cart, String sessionID){
+        CartsInMemory.put(sessionID,cart);
+        return CartsInMemory.get(sessionID) == cart;
     }
-    public void addNewProductToCart(int userCookie, OrderLine product){
+    public void addNewProductToCart(String userCookie, OrderLine product){
         Cart cart = CartsInMemory.get(userCookie);
         cart.addProduct(product);
         CartsInMemory.replace(userCookie,cart);
     }
-    public void removeProductFromCart(int userCookie, int id){
+    public void removeProductFromCart(String userCookie, int id){
         Cart cart = CartsInMemory.get(userCookie);
         cart.removeProduct(id);
         if(cart.checkIfNextProductExists(id+1)){

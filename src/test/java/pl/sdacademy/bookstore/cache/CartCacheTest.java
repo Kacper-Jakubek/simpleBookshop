@@ -22,8 +22,8 @@ class CartCacheTest {
         Cart cart2 = new Cart();
         CartCache cartCache = new CartCache();
 
-        cartCache.storeCart(cart1);
-        cartCache.storeCart(cart2);
+        cartCache.storeCart(cart1,"1");
+        cartCache.storeCart(cart2,"2");
 
         assertThat(cartCache.CartsInMemory.size()).isEqualTo(2);
 
@@ -40,13 +40,13 @@ class CartCacheTest {
         Cart cart1 = new Cart();
         Cart cart2 = new Cart();
         CartCache cartCache = new CartCache();
-        cartCache.storeCart(cart1);
-        cartCache.storeCart(cart2);
+        cartCache.storeCart(cart1,"1");
+        cartCache.storeCart(cart2,"2");
         //when
-        cartCache.addNewProductToCart(0,orderLine1);
-        cartCache.addNewProductToCart(0,orderLine2);
-        cartCache.addNewProductToCart(1,orderLine3);
-        cartCache.addNewProductToCart(1,orderLine4);
+        cartCache.addNewProductToCart("1",orderLine1);
+        cartCache.addNewProductToCart("1",orderLine2);
+        cartCache.addNewProductToCart("2",orderLine3);
+        cartCache.addNewProductToCart("2",orderLine4);
         //then
         assertThat(cartCache.CartsInMemory.size()).isEqualTo(2);
         assertThat(cart1.getListofProducts().size()).isEqualTo(2);
@@ -62,11 +62,11 @@ class CartCacheTest {
         Cart cart1 = new Cart();
         CartCache cartCache = new CartCache();
 
-        cartCache.storeCart(cart1);
-        cartCache.addNewProductToCart(0,orderLine1);
-        cartCache.addNewProductToCart(0,orderLine2);
-        cartCache.addNewProductToCart(0,orderLine3);
-        cartCache.removeProductFromCart(0,2);
+        cartCache.storeCart(cart1,"1");
+        cartCache.addNewProductToCart("1",orderLine1);
+        cartCache.addNewProductToCart("1",orderLine2);
+        cartCache.addNewProductToCart("1",orderLine3);
+        cartCache.removeProductFromCart("1",2);
 
         assertThat(cartCache.CartsInMemory.size()).isEqualTo(1);
         assertThat(cart1.getListofProducts().size()).isEqualTo(2);
@@ -83,11 +83,11 @@ class CartCacheTest {
         Cart cart1 = new Cart();
         CartCache cartCache = new CartCache();
 
-        cartCache.storeCart(cart1);
-        cartCache.addNewProductToCart(0,orderLine1);
-        cartCache.addNewProductToCart(0,orderLine2);
-        cartCache.addNewProductToCart(0,orderLine3);
-        cartCache.removeProductFromCart(0,1);
+        cartCache.storeCart(cart1,"1");
+        cartCache.addNewProductToCart("1",orderLine1);
+        cartCache.addNewProductToCart("1",orderLine2);
+        cartCache.addNewProductToCart("1",orderLine3);
+        cartCache.removeProductFromCart("1",1);
 
         assertThat(cartCache.CartsInMemory.size()).isEqualTo(1);
         assertThat(cart1.getListofProducts().size()).isEqualTo(2);
