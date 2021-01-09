@@ -9,9 +9,16 @@ private ArrayList<OrderLine> ListofProducts = new ArrayList<>();
         return ListofProducts;
     }
 
-    public ArrayList<OrderLine> addProductToCart(OrderLine orderLine){
+    public ArrayList<OrderLine> addProduct(OrderLine orderLine){
      ListofProducts.add(orderLine);
      return ListofProducts;
+ }
+ public ArrayList<OrderLine> removeProduct(int id){
+        ListofProducts.remove(id);
+        return ListofProducts;
+ }
+ public boolean checkIfNextProductExists(int id){
+        return ListofProducts.size()<id+1;
  }
 
 }

@@ -3,7 +3,7 @@ package pl.sdacademy.bookstore.model;
 import pl.sdacademy.bookstore.DTO.ProductDTO;
 
 public class OrderLine {
-    private final int id;
+    private int id;
     private final ProductDTO productDTO;
     private int quantity;
     private final double price;
@@ -11,6 +11,10 @@ public class OrderLine {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public ProductDTO getProduct() {

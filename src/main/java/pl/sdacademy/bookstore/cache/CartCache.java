@@ -18,7 +18,18 @@ public class CartCache {
     }
     public void addNewProductToCart(int userCookie, OrderLine product){
         Cart cart = CartsInMemory.get(userCookie);
-        cart.addProductToCart(product);
+        cart.addProduct(product);
         CartsInMemory.replace(userCookie,cart);
+    }
+    public void removeProductFromCart(int userCookie, int id){
+        Cart cart = CartsInMemory.get(userCookie);
+        cart.removeProduct(id);
+        if(cart.checkIfNextProductExists(id+1)){
+            int idCount=0;
+            for (OrderLine o:cart.getListofProducts()) {
+                o.setId(idCount++);
+            }
+        }
+            CartsInMemory.replace(userCookie,cart);
     }
 }
