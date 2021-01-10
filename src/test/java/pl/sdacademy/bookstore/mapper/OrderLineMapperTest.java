@@ -1,12 +1,11 @@
 package pl.sdacademy.bookstore.mapper;
 
 import org.junit.jupiter.api.Test;
-import pl.sdacademy.bookstore.DTO.ProductDTO;
-import pl.sdacademy.bookstore.DTO.ShoppingCart;
+import pl.sdacademy.bookstore.dto.ProductDTO;
+import pl.sdacademy.bookstore.dto.ShoppingCart;
 import pl.sdacademy.bookstore.model.OrderLine;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class OrderLineMapperTest {
     @Test

@@ -1,6 +1,6 @@
 package pl.sdacademy.bookstore.mapper;
 
-import pl.sdacademy.bookstore.DTO.ProductDTO;
+import pl.sdacademy.bookstore.dto.ProductDTO;
 
 public class ProductNameMapper {
 
