@@ -12,6 +12,7 @@ public class AddressEntity {
     private String country;
     private String city;
     private String street;
+    @Column(name = "zip_code")
     private String zipCode;
 
 
@@ -23,6 +24,10 @@ public class AddressEntity {
         this.city = city;
         this.street = street;
         this.zipCode = zipCode;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public String getCountry() {
