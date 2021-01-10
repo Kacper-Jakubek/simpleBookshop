@@ -1,14 +1,10 @@
-package pl.sdacademy.bookstore.entity;
+package pl.sdacademy.bookstore.db;
 
-import org.hibernate.annotations.GeneratorType;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-public class Address {
+@Table(name = "address")
+public class AddressEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,10 +15,10 @@ public class Address {
     private String zipCode;
 
 
-    public Address() {
+    public AddressEntity() {
     }
 
-    public Address(String country, String city, String street, String zipCode) {
+    public AddressEntity(String country, String city, String street, String zipCode) {
         this.country = country;
         this.city = city;
         this.street = street;

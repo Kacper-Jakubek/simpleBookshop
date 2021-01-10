@@ -1,9 +1,10 @@
-package pl.sdacademy.bookstore.entity;
+package pl.sdacademy.bookstore.db;
 
 import javax.persistence.*;
 
 @Entity
-public class User {
+@Table(name = "user")
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -13,14 +14,14 @@ public class User {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id", referencedColumnName = "id")
-    private Person person;
+    private PersonEntity person;
     private boolean isAdmin;
     private boolean isActive;
 
-    public User() {
+    public UserEntity() {
     }
 
-    public User(String username, String password, Person person, boolean isAdmin, boolean isActive) {
+    public UserEntity(String username, String password, PersonEntity person, boolean isAdmin, boolean isActive) {
         this.username = username;
         this.password = password;
         this.person = person;
@@ -44,11 +45,11 @@ public class User {
         this.password = password;
     }
 
-    public Person getPerson() {
+    public PersonEntity getPerson() {
         return person;
     }
 
-    public void setPerson(Person person) {
+    public void setPerson(PersonEntity person) {
         this.person = person;
     }
 
