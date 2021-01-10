@@ -1,6 +1,6 @@
 package pl.sdacademy.bookstore.model;
 
-import pl.sdacademy.bookstore.DTO.ProductDTO;
+import pl.sdacademy.bookstore.dto.ProductDTO;
 
 public class OrderLine {
     private int id;
