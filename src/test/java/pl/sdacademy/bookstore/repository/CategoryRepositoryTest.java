@@ -1,10 +1,10 @@
 package pl.sdacademy.bookstore.repository;
 
 /**
- * A class that perform integration test of CategoryRepository
+ * A class that perform integration test of CategoryRepository. It raise Spring and JPA.
  *
- * <p>An <code>CategoryRepositoryTest</code> check connection witt H2 database
- * an tests all method being in CategoryRepository
+ * <p>An <code>CategoryRepositoryTest</code> check connection with H2 database
+ * and tests all method being in CategoryRepository
  *
  * @author Irek Marszałek
  */
@@ -19,9 +19,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 class CategoryRepositoryTest {
@@ -39,7 +40,6 @@ class CategoryRepositoryTest {
     CategoryEntity categoryEntity = new CategoryEntity();
     categoryEntity.setName("Fantasy");
     categoryEntity.setLeaf(false);
-
     CategoryEntity saved = categoryRepository.save(categoryEntity);
 
     long foundId = saved.getId();
@@ -53,15 +53,15 @@ class CategoryRepositoryTest {
 
   @Test
   void shouldUpdateExistingCategoryWithParentCategory(){
-    CategoryEntity categoryEntity = new CategoryEntity();
-    categoryEntity.setName("Horror");
-    categoryEntity.setLeaf(false);
-    categoryRepository.save(categoryEntity);
-
     CategoryEntity categoryEntityParent = new CategoryEntity();
     categoryEntityParent.setName("Książki");
     categoryEntityParent.setLeaf(false);
     categoryRepository.save(categoryEntityParent);
+
+    CategoryEntity categoryEntity = new CategoryEntity();
+    categoryEntity.setName("Horror");
+    categoryEntity.setLeaf(false);
+    categoryRepository.save(categoryEntity);
 
     categoryEntity.setParentCategory(categoryEntityParent);
     categoryRepository.update(categoryEntity);
@@ -69,35 +69,19 @@ class CategoryRepositoryTest {
     assertThat(categoryEntity.getParentCategory().getId()).isEqualTo(categoryEntityParent.getId());
     assertThat(categoryEntity.getParentCategory().getName()).isEqualTo(categoryEntityParent.getName());
     assertThat(categoryEntity.getParentCategory().isLeaf()).isEqualTo(categoryEntityParent.isLeaf());
-
-  }
-
-  @Test
-  void shouldUpdateExistingCategoryWithHimSelf(){
-    CategoryEntity categoryEntity = new CategoryEntity();
-    categoryEntity.setName("Horror");
-    categoryEntity.setLeaf(false);
-    categoryRepository.save(categoryEntity);
-
-    categoryEntity.setParentCategory(categoryEntity);
-    categoryRepository.update(categoryEntity);
-
-    assertThat(categoryEntity.getParentCategory().getId()).isEqualTo(categoryEntity.getId());
-    assertThat(categoryEntity.getParentCategory().getName()).isEqualTo(categoryEntity.getName());
-    assertThat(categoryEntity.getParentCategory().isLeaf()).isEqualTo(categoryEntity.isLeaf());
   }
 
   @Test
   void shouldFindTwoCategories() {
-    CategoryEntity categoryEntity = new CategoryEntity();
-    categoryEntity.setName("Horror");
-    categoryEntity.setLeaf(false);
-    categoryRepository.save(categoryEntity);
-
     CategoryEntity categoryEntityParent = new CategoryEntity();
     categoryEntityParent.setName("Książki");
     categoryEntityParent.setLeaf(false);
     categoryRepository.save(categoryEntityParent);
+
+    CategoryEntity categoryEntity = new CategoryEntity();
+    categoryEntity.setName("Horror");
+    categoryEntity.setLeaf(true);
+    categoryRepository.save(categoryEntity);
 
     List<CategoryEntity> categoryEntityList = categoryRepository.findAll();
 
@@ -144,5 +128,62 @@ class CategoryRepositoryTest {
     Optional<CategoryEntity> found = categoryRepository.getById(savedId);
 
     assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(()->found.orElseThrow(NoSuchElementException::new));
+  }
+
+  @Test
+  void shouldFindOneChild() {
+    CategoryEntity parentCategoryEntity = new CategoryEntity();
+    parentCategoryEntity.setName("Książki");
+    parentCategoryEntity.setLeaf(false);
+    CategoryEntity parentSaved = categoryRepository.save(parentCategoryEntity);
+
+    long parentSavedId = parentSaved.getId();
+
+    CategoryEntity categoryEntity = new CategoryEntity();
+    categoryEntity.setName("Horror");
+    categoryEntity.setParentCategory(parentSaved);
+    categoryEntity.setLeaf(true);
+    categoryRepository.save(categoryEntity);
+    List<CategoryEntity> children = categoryRepository.findAllChildren(parentSavedId);
+
+    assertThat(children.size()).isEqualTo(1);
+  }
+
+  @Test
+  void shouldReturnEmptyChildrenList() {
+    CategoryEntity parentCategoryEntity = new CategoryEntity();
+    parentCategoryEntity.setName("Książki");
+    parentCategoryEntity.setLeaf(false);
+    CategoryEntity parentSaved = categoryRepository.save(parentCategoryEntity);
+
+    long parentSavedId = parentSaved.getId();
+    List<CategoryEntity> children = categoryRepository.findAllChildren(parentSavedId);
+
+    assertThat(children).isEmpty();
+  }
+
+  @Test
+  void shouldCountZeroChildren(){
+    int countedChildren = categoryRepository.countChildren(1);
+    assertThat(countedChildren).isZero();
+  }
+
+  @Test
+  void shouldCountOneChild(){
+    CategoryEntity parentCategoryEntity = new CategoryEntity();
+    parentCategoryEntity.setName("Root");
+    parentCategoryEntity.setLeaf(false);
+    CategoryEntity parentSaved = categoryRepository.save(parentCategoryEntity);
+
+    CategoryEntity categoryEntity = new CategoryEntity();
+    categoryEntity.setName("Fantasy");
+    categoryEntity.setLeaf(true);
+    categoryEntity.setParentCategory(parentSaved);
+    categoryRepository.save(categoryEntity);
+
+    long parentCategoryId = parentCategoryEntity.getId();
+
+    int countedChildren = categoryRepository.countChildren(parentCategoryId);
+    assertThat(countedChildren).isEqualTo(1);
   }
 }

@@ -12,44 +12,25 @@
             <column name="name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="parentCategory" type="BIGINT">
-                <constraints foreignKeyName="to_category" referencedColumnNames="id" referencedTableName="category"/>
+            <column name="parent_category_id" type="BIGINT">
+                <constraints foreignKeyName="to_category" referencedColumnNames="id" referencedTableName="category" nullable="true"/>
+            </column>
+            <column name="leaf" type="BIT">
+                <constraints nullable="false" />
             </column>
         </createTable>
     </changeSet>
-    
-    <changeSet id="category-table-modify" author="Irek Marszałek">
-        <addColumn tableName="category">
-            <column afterColumn="parentCategory" name="leaf" type="BIT">
-                <constraints nullable="false" />
-            </column>
-        </addColumn>
-    </changeSet>
-
-    <changeSet id="category-table-modify2" author="Irek Marszałek">
-        <renameColumn columnDataType="BIGINT" tableName="category" oldColumnName="parentCategory" newColumnName="parent_category_id"/>
-    </changeSet>
-
 	<changeSet id="init-db-20201217" author="Ania L-O">
 		<createTable tableName="author">
 			<column autoIncrement="true" name="id" type="BIGINT">
 				<constraints primaryKey="true"/>
 			</column>
-			<column name="AuthorsFname" type="VARCHAR(255)">
+			<column name="first_name" type="VARCHAR(255)">
 				<constraints nullable="false" />
 			</column>
-			<column name="AuthorLname" type="VARCHAR(255)">
+			<column name="last_name" type="VARCHAR(255)">
 				 <constraints nullable="false" />
 			</column>
 		</createTable>
 	</changeSet>
-
-    <changeSet id="author-table-modify" author="Irek Marszałek">
-        <renameColumn columnDataType="VARCHAR(255)" tableName="author" oldColumnName="AuthorsFname" newColumnName="firstName"/>
-        <renameColumn columnDataType="VARCHAR(255)" tableName="author" oldColumnName="AuthorLname" newColumnName="lastName"/>
-    </changeSet>
-    <changeSet id="author-table-modify2" author="Irek Marszałek">
-        <renameColumn columnDataType="VARCHAR(255)" tableName="author" oldColumnName="firstName" newColumnName="first_name"/>
-        <renameColumn columnDataType="VARCHAR(255)" tableName="author" oldColumnName="lastName" newColumnName="last_name"/>
-    </changeSet>
 </databaseChangeLog>

@@ -1,9 +1,8 @@
 package pl.sdacademy.bookstore.service;
-
 /**
- * A class that that collects function to operate on a Category
+ * A class that that collects function to operate on a Category.
  *
- * <p>An <code>CategoryService</code> instance is supposed to be a set
+ * <p>An <code>CategoryService</code> instance is supposed to be a set of
  * methods that allows to work with category
  *
  * @author Irek Marszałek
@@ -16,7 +15,7 @@ import pl.sdacademy.bookstore.db.CategoryEntity;
 import pl.sdacademy.bookstore.model.dto.Category;
 import pl.sdacademy.bookstore.model.mapper.CategoryMapper;
 import pl.sdacademy.bookstore.repository.CategoryRepository;
-
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,7 +28,6 @@ public class CategoryService {
     this.categoryRepository = categoryRepository;
   }
 
-
   /**
    * Add a new category.
    * @param category DTO instance
@@ -39,8 +37,8 @@ public class CategoryService {
   public Category addCategory(Category category){
     //TODO: dorób validację dodawania kategorii
     CategoryEntity categoryEntity = categoryMapper.map(category);
-    CategoryEntity savedCategory = categoryRepository.save(categoryEntity);
-    return categoryMapper.map(savedCategory);
+    CategoryEntity saveCategory = categoryRepository.save(categoryEntity);
+    return categoryMapper.map(saveCategory);
   }
 
   /**
@@ -58,6 +56,7 @@ public class CategoryService {
 
   /**
    * Delete existing category.
+   *
    * @param category DTO instance
    * @return void
    *
@@ -68,10 +67,35 @@ public class CategoryService {
     categoryRepository.delete(categoryEntity);
   }
 
+  /**
+   * Looking for Category having provided id.
+   * @param id category id
+   * @return empty optional if could not find, optional with category if managed to find
+   *
+   */
   public Optional<Category> findById(long id){
     Optional<CategoryEntity> found = categoryRepository.getById(id);
-
     return found.map(categoryEntity -> categoryMapper.map(categoryEntity));
+  }
+
+  /**
+   * Looking for children categories.
+   * @param id category id
+   * @return List of children categories (without grandchildren etc, only children)
+   *
+   */
+  public List<Category> findChildren(long id){
+    return categoryMapper.map(categoryRepository.findAllChildren(id));
+  }
+
+  /**
+   * Counting children of provided category.
+   * @param id category id
+   * @return Number (int) of founded children (but without grandchildren, don't forget it ;) )
+   *
+   */
+  public int countChildren(long id){
+    return categoryRepository.countChildren(id);
   }
 
 }

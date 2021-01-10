@@ -11,6 +11,8 @@ import pl.sdacademy.bookstore.model.dto.Category;
 import pl.sdacademy.bookstore.model.mapper.CategoryMapper;
 import pl.sdacademy.bookstore.repository.CategoryRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -20,18 +22,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceWithMockTest {
-  private static final long PARENT_CATEGORY_ID = 2;
+  private static final long PARENT_CATEGORY_ID = 1;
   private static final String PARENT_CATEGORY_NAME = "Książki";
   private static final CategoryEntity PARENT_CATEGORY_PARENT = null;
-  private static final boolean PARENT_LEAF = true;
+  private static final boolean PARENT_LEAF = false;
 
-  private static final CategoryEntity PARENT_CATEGORY = new CategoryEntity(PARENT_CATEGORY_ID
+  private static final CategoryEntity PARENT_CATEGORY = new CategoryEntity(
+          PARENT_CATEGORY_ID
           , PARENT_CATEGORY_NAME
           , PARENT_CATEGORY_PARENT
           , PARENT_LEAF);
 
-  private static final long CATEGORY_ID = 1;
-  private static final String CATEGORY_NAME = "Książki";
+  private static final long CATEGORY_ID = 2;
+  private static final String CATEGORY_NAME = "Horror";
   private static final CategoryEntity CATEGORY_PARENT = PARENT_CATEGORY;
   private static final boolean CATEGORY_LEAF = true;
   
@@ -100,5 +103,38 @@ class CategoryServiceWithMockTest {
     verify(categoryRepository).getById(savedId);
 
     verifyNoMoreInteractions(categoryRepository);
+  }
+
+  @Test
+  void shouldFindTwoChildren(){
+    List<CategoryEntity> returnedCategories = new ArrayList<>();
+    returnedCategories.add(CATEGORY_ENTITY);
+
+    when(categoryRepository.findAllChildren(PARENT_CATEGORY_ID)).thenReturn(returnedCategories);
+
+    List<Category> foundedCategories = categoryService.findChildren(PARENT_CATEGORY.getId());
+    assertThat(foundedCategories.size()).isEqualTo(1);
+  }
+
+  @Test
+  void shouldReturnEmptyChildrenList(){
+    when(categoryRepository.save(any())).thenReturn(PARENT_CATEGORY);
+    Category parentSaved = categoryService.addCategory(categoryMapper.map(PARENT_CATEGORY));
+
+    long parentSavedId = parentSaved.getId();
+    List<CategoryEntity> returnedCategories = new ArrayList<>();
+
+    when(categoryRepository.findAllChildren(parentSavedId)).thenReturn(returnedCategories);
+
+    List<Category> foundedCategories = categoryService.findChildren(PARENT_CATEGORY.getId());
+    assertThat(foundedCategories).isEmpty();
+  }
+
+  @Test
+  void shouldCountOneChildren(){
+    when(categoryRepository.countChildren(PARENT_CATEGORY_ID)).thenReturn(1);
+    int countedChildren = categoryService.countChildren(PARENT_CATEGORY_ID);
+
+    assertThat(countedChildren).isEqualTo(1);
   }
 }
