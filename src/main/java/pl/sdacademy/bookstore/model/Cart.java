@@ -13,6 +13,14 @@ private ArrayList<OrderLine> ListofProducts = new ArrayList<>();
      ListofProducts.add(orderLine);
      return ListofProducts;
  }
+ public boolean updateProduct(OrderLine orderLine){
+     if(ListofProducts.contains(orderLine)){
+        int index = ListofProducts.indexOf(orderLine);
+        ListofProducts.set(index,orderLine);
+        return true;
+     }
+     return false;
+ }
  public boolean removeProduct(OrderLine orderLine){
         int size = ListofProducts.size();
         int index = ListofProducts.indexOf(orderLine);

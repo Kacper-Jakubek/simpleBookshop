@@ -92,5 +92,14 @@ class CartCacheTest {
         assertThat(cart1.getListofProducts().get(1).getId()).isEqualTo(1);
     }
 
+    @Test
+    void shouldReturnLackOfCart(){
+        CartCache cartCache = new CartCache();
+        Cart cart1 = new Cart();
+        cartCache.storeCart(cart1,"0");
+        assertThat(cartCache.checkIfCartExist("1")).isEqualTo(false);
+        assertThat(cartCache.checkIfCartExist("0")).isEqualTo(true);
+    }
+
 
 }
