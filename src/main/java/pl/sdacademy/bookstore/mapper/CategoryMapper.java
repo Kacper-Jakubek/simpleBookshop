@@ -1,4 +1,4 @@
-package pl.sdacademy.bookstore.model.mapper;
+package pl.sdacademy.bookstore.mapper;
 
 /**
  * A class that will map between Category and CategoryEntity
@@ -11,7 +11,7 @@ package pl.sdacademy.bookstore.model.mapper;
 
 import org.mapstruct.Mapper;
 import pl.sdacademy.bookstore.db.CategoryEntity;
-import pl.sdacademy.bookstore.model.dto.Category;
+import pl.sdacademy.bookstore.model.Category;
 
 import java.util.List;
 

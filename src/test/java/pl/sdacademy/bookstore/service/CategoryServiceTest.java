@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.sdacademy.bookstore.db.CategoryEntity;
-import pl.sdacademy.bookstore.model.dto.Category;
+import pl.sdacademy.bookstore.model.Category;
 import pl.sdacademy.bookstore.repository.CategoryRepository;
 
 import java.util.NoSuchElementException;

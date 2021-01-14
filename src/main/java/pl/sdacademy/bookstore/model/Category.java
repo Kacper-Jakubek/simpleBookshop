@@ -1,4 +1,4 @@
-package pl.sdacademy.bookstore.model.dto;
+package pl.sdacademy.bookstore.model;
 
 /**
  * A class that represents DTO for category from db.CategoryEntity
