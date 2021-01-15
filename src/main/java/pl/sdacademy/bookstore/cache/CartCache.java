@@ -19,13 +19,13 @@ public class CartCache {
         cartsInMemory.put(sessionID,cart);
         return cartsInMemory.get(sessionID).equals(cart);
     }
-    public void addNewProductToCart(String userCookie, OrderLine product){
-        Cart cart = cartsInMemory.get(userCookie);
+    public void addNewProductToCart(String sessionID, OrderLine product){
+        Cart cart = cartsInMemory.get(sessionID);
         cart.addProduct(product);
-        cartsInMemory.replace(userCookie,cart);
+        cartsInMemory.replace(sessionID,cart);
     }
-    public void removeProductFromCart(String userCookie, OrderLine product){
-        Cart cart = cartsInMemory.get(userCookie);
+    public void removeProductFromCart(String sessionID, OrderLine product){
+        Cart cart = cartsInMemory.get(sessionID);
         cart.removeProduct(product);
         if(cart.checkIfNextProductExists(product)){
             int idCount=0;
@@ -33,22 +33,22 @@ public class CartCache {
                 o.setId(idCount++);
             }
         }
-            cartsInMemory.replace(userCookie,cart);
+            cartsInMemory.replace(sessionID,cart);
     }
-    public void updateProductInCart(String userCookie, OrderLine product){
-        Cart cart = cartsInMemory.get(userCookie);
+    public void updateProductInCart(String sessionID, OrderLine product){
+        Cart cart = cartsInMemory.get(sessionID);
         cart.updateProduct(product);
     }
-    public boolean checkIfCartExist(String userCookie){
-        return cartsInMemory.get(userCookie)!=null;
+    public boolean checkIfCartExist(String sessionID){
+        return cartsInMemory.get(sessionID)!=null;
     }
 
     public int getNextId(){
         return cartsInMemory.size();
     }
 
-    public OrderLine getOrderLine(String userCookie, ProductDTO productDTO){
-        Cart cart = cartsInMemory.get(userCookie);
+    public OrderLine getOrderLine(String sessionID, ProductDTO productDTO){
+        Cart cart = cartsInMemory.get(sessionID);
         ArrayList<OrderLine> orderLines = cart.getListofProducts();
         for (OrderLine o:orderLines) {
             if(o.getProduct().equals(productDTO)){
@@ -57,7 +57,7 @@ public class CartCache {
         }
     return null;
     }
-    public Cart getCart(String userCookie){
-        return cartsInMemory.get(userCookie);
+    public Cart getCart(String sessionID){
+        return cartsInMemory.get(sessionID);
     }
 }

@@ -1,7 +1,5 @@
 package pl.sdacademy.bookstore.service;
 
-import liquibase.pro.packaged.C;
-import org.graalvm.compiler.core.common.type.ArithmeticOpTable;
 import org.springframework.stereotype.Service;
 import pl.sdacademy.bookstore.cache.CartCache;
 import pl.sdacademy.bookstore.dto.ProductDTO;
@@ -17,6 +15,7 @@ public class CartService {
     public CartService(CartCache cartCache) {
         this.cartCache = cartCache;
     }
+
     public void validateCart(String cookie){
         if(!cartCache.checkIfCartExist(cookie)){
             Cart cart = new Cart();
@@ -24,49 +23,49 @@ public class CartService {
         }
     }
 
-    public OrderLine add(ProductDTO productDTO, String cookie){
-        validateCart(cookie);
+    public OrderLine add(ProductDTO productDTO, String sessionID){
+        validateCart(sessionID);
         OrderLine orderLine = new OrderLine(cartCache.getNextId(),productDTO,1,productDTO.getPrice(),productDTO.getPrice());
-        cartCache.addNewProductToCart(cookie,orderLine);
+        cartCache.addNewProductToCart(sessionID,orderLine);
         return orderLine;
     }
 
-    public OrderLine increaseQuantity(ProductDTO productDTO, String cookie){
-        validateCart(cookie);
-        OrderLine orderLine = cartCache.getOrderLine(cookie,productDTO);
+    public boolean increaseQuantity(ProductDTO productDTO, String sessionID){
+        validateCart(sessionID);
+        OrderLine orderLine = cartCache.getOrderLine(sessionID,productDTO);
         int oldQuantity = orderLine.getQuantity();
         orderLine.setQuantity(oldQuantity+1);
-        cartCache.updateProductInCart(cookie,orderLine);
-        return orderLine;
-    }
+        cartCache.updateProductInCart(sessionID,orderLine);
+        return orderLine.getQuantity() != oldQuantity;
+        }
 
-    public OrderLine decreaseQuantity(ProductDTO productDTO, String cookie){
-        validateCart(cookie);
-        OrderLine orderLine = cartCache.getOrderLine(cookie,productDTO);
+    public boolean decreaseQuantity(ProductDTO productDTO, String sessionID){
+        validateCart(sessionID);
+        OrderLine orderLine = cartCache.getOrderLine(sessionID,productDTO);
         int oldQuantity = orderLine.getQuantity();
         orderLine.setQuantity(oldQuantity-1);
         if(orderLine.getQuantity()<=0){
-            cartCache.removeProductFromCart(cookie,orderLine);
-            return null;
+            cartCache.removeProductFromCart(sessionID,orderLine);
+            return false;
         }else {
-            cartCache.updateProductInCart(cookie,orderLine);
-            return orderLine;
+            cartCache.updateProductInCart(sessionID,orderLine);
+            return true;
         }
     }
 
-    public boolean delete(ProductDTO productDTO, String cookie){
-        validateCart(cookie);
-        OrderLine orderLine = cartCache.getOrderLine(cookie,productDTO);
+    public boolean delete(ProductDTO productDTO, String sessionID){
+        validateCart(sessionID);
+        OrderLine orderLine = cartCache.getOrderLine(sessionID,productDTO);
         if(orderLine!=null) {
-            cartCache.removeProductFromCart(cookie, orderLine);
+            cartCache.removeProductFromCart(sessionID, orderLine);
             return true;
         }else {
             return false;
         }
     }
-    public ArrayList<OrderLine> findAllProducts(String cookie){
-        validateCart(cookie);
-        Cart cart = cartCache.getCart(cookie);
+    public ArrayList<OrderLine> findAllProducts(String sessionID){
+        validateCart(sessionID);
+        Cart cart = cartCache.getCart(sessionID);
         return cart.getListofProducts();
     }
 
