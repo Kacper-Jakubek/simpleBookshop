@@ -1,13 +1,15 @@
 package pl.sdacademy.bookstore.db;
 
-/* By IM */
-/*Books category entity*/
+/**
+ * A class that represents Category entity
+ *
+ * <p>An <code>Category</code> instance is supposed to be a representation
+ * of table that will be created in database. Should complies with entries in change-log.xml
+ *
+ * @author Irek Marszałek
+ */
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity(name = "category")
 public class CategoryEntity {
