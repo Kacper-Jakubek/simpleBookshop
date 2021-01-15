@@ -1,4 +1,4 @@
-package pl.sdacademy.bookstore.DTO;
+package pl.sdacademy.bookstore.dto;
 
 public class ShoppingCart {
     private String bookName;

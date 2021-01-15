@@ -3,7 +3,7 @@ package pl.sdacademy.bookstore.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-import pl.sdacademy.bookstore.DTO.ShoppingCart;
+import pl.sdacademy.bookstore.dto.ShoppingCart;
 import pl.sdacademy.bookstore.model.OrderLine;
 
 @Mapper(uses = {ProductNameMapper.class})

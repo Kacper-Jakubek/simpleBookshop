@@ -43,6 +43,10 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.version}</version>
@@ -131,12 +135,6 @@
 			<version>3.3.3</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-assertions-generator-maven-plugin</artifactId>
-			<version>2.2.0</version>
-		</dependency>
-
 	</dependencies>
 
 	<build>
