@@ -16,10 +16,15 @@ public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(name = "product_title")
     private String title;
+    @Column(name = "product_description")
     private String description;
+    @Column(name = "product_price")
     private BigDecimal price;
+    @Column(name = "product_availability")
     private boolean isAvailable;
+    @Column(name = "product_miniature")
     @URL
     private String miniature;
 

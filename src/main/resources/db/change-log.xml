@@ -94,5 +94,8 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="init-db-20210116" author="Anna Ksiazek">
+        <modifyDataType tableName="product" columnName="product_price" newDataType="currency" />
+    </changeSet>
 
 </databaseChangeLog>

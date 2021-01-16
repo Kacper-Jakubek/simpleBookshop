@@ -7,26 +7,15 @@ import javax.persistence.*;
 public class AddressEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String country;
     private String city;
     private String street;
     @Column(name = "zip_code")
     private String zipCode;
 
-
-    public AddressEntity() {
-    }
-
-    public AddressEntity(String country, String city, String street, String zipCode) {
-        this.country = country;
-        this.city = city;
-        this.street = street;
-        this.zipCode = zipCode;
-    }
-
-    public Integer getId() {
+   public Long getId() {
         return id;
     }
 
