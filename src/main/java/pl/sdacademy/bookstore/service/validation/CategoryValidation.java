@@ -10,7 +10,7 @@ package pl.sdacademy.bookstore.service.validation;
  */
 
 import org.springframework.stereotype.Component;
-import pl.sdacademy.bookstore.model.dto.Category;
+import pl.sdacademy.bookstore.model.Category;
 
 import java.util.ArrayList;
 import java.util.List;

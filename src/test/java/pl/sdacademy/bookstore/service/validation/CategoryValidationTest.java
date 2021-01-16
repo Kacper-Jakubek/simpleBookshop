@@ -1,7 +1,7 @@
 package pl.sdacademy.bookstore.service.validation;
 
 import org.junit.jupiter.api.Test;
-import pl.sdacademy.bookstore.model.dto.Category;
+import pl.sdacademy.bookstore.model.Category;
 
 import java.util.List;
 

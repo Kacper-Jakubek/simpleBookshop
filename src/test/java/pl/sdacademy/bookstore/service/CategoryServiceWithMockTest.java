@@ -7,8 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.sdacademy.bookstore.db.CategoryEntity;
-import pl.sdacademy.bookstore.model.dto.Category;
-import pl.sdacademy.bookstore.model.mapper.CategoryMapper;
+import pl.sdacademy.bookstore.model.Category;
+import pl.sdacademy.bookstore.mapper.CategoryMapper;
 import pl.sdacademy.bookstore.repository.CategoryRepository;
 
 import java.util.ArrayList;
