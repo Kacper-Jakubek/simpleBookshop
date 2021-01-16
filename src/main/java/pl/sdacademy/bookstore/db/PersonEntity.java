@@ -2,12 +2,13 @@ package pl.sdacademy.bookstore.db;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "person")
+//FIXME: uncomment when person table is ready
+//@Entity
+//@Table(name = "person")
 public class PersonEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String firstName;
     private String lastName;
