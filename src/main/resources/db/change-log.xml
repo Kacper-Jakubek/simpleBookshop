@@ -52,4 +52,47 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="init-db-20201222" author="Pamela Kwiatkowska">
+        <createTable tableName="product">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="product_title" type="VARCHAR(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="product_description" type="VARCHAR(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="product_miniature" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="product_price" type="BIGINT">
+                <constraints nullable="false" />
+            </column>
+            <column name="product_availability" type="BOOLEAN">
+                <constraints nullable="false"  />
+            </column>
+        </createTable>
+
+        <createTable tableName="category_to_product">
+            <column name="category_id" type="BIGINT">
+                <constraints foreignKeyName="product_to_category" referencedColumnNames="id" referencedTableName="category" />
+            </column>
+            <column name="product_id" type="BIGINT">
+                <constraints foreignKeyName="category_to_product" referencedColumnNames="id" referencedTableName="product" />
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="init-db-20210109" author="Anna Ksiazek">
+        <createTable tableName="author_to_product">
+            <column name="author_id" type="BIGINT">
+                <constraints foreignKeyName="product_to_author" referencedColumnNames="id" referencedTableName="author" />
+            </column>
+            <column name="product_id" type="BIGINT">
+                <constraints foreignKeyName="author_to_product" referencedColumnNames="id" referencedTableName="product" />
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>
