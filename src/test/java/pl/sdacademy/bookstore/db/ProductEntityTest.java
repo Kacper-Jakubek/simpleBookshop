@@ -3,15 +3,15 @@ package pl.sdacademy.bookstore.db;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import pl.sdacademy.bookstore.model.dto.Category;
-import pl.sdacademy.bookstore.repository.CategoryRepository;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,7 +35,7 @@ class ProductEntityTest {
         categoryEntity.setLeaf(false);
         entityManager.persist(categoryEntity);
 
-        Set<AuthorEntity> authors = new HashSet<>();
+        List<AuthorEntity> authors = new ArrayList<>();
         authors.add(authorEntity);
 
         Set<CategoryEntity> categories = new HashSet<>();
@@ -44,7 +44,7 @@ class ProductEntityTest {
         ProductEntity productEntity = new ProductEntity();
         productEntity.setTitle("Wiedźmin");
         productEntity.setDescription("świetna książka o przygodach wiedźmina");
-        BigInteger price = new BigInteger("40"); // czy to tak trzeba?
+        BigDecimal price = new BigDecimal("40,99"); // czy to tak trzeba?
         productEntity.setPrice(price);
         productEntity.setAvailable(true);
         productEntity.setMiniature("https://allegro.pl/oferta/saga-wiedzmin-pakiet-8-tomow-sapkowski-opr-gra-8788126431");

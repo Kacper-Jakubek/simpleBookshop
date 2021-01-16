@@ -3,8 +3,10 @@ package pl.sdacademy.bookstore.db;
 import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
-import java.math.BigInteger;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -16,7 +18,7 @@ public class ProductEntity {
     private long id;
     private String title;
     private String description;
-    private BigInteger price;
+    private BigDecimal price;
     private boolean isAvailable;
     @URL
     private String miniature;
@@ -33,13 +35,14 @@ public class ProductEntity {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
-    private Set<AuthorEntity> authors = new HashSet<>();
+    private List<AuthorEntity> authors = new ArrayList<AuthorEntity>() {
+    };
 
 
     public ProductEntity(long id, String title, String description,
-                         BigInteger price, boolean isAvailable,
+                         BigDecimal price, boolean isAvailable,
                          @URL String miniature, Set<CategoryEntity> categories,
-                         Set<AuthorEntity> authors) {
+                         List<AuthorEntity> authors) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -77,11 +80,11 @@ public class ProductEntity {
         this.description = description;
     }
 
-    public BigInteger getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(BigInteger price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -109,11 +112,11 @@ public class ProductEntity {
         this.categories = categories;
     }
 
-    public Set<AuthorEntity> getAuthors() {
+    public List<AuthorEntity> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(Set<AuthorEntity> authors) {
+    public void setAuthors(List<AuthorEntity> authors) {
         this.authors = authors;
     }
 }
