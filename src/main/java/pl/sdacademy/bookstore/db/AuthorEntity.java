@@ -1,6 +1,5 @@
 package pl.sdacademy.bookstore.db;
 
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,29 +10,29 @@ public class AuthorEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;  // powinno być z małej id
+    private long id;
     private String firstName;
     private String lastName;
 
     public AuthorEntity() {
     }
 
-    public AuthorEntity(Integer Id, String firstName, String AuthorsLname) {
-        this.Id = Id;
+    public AuthorEntity(long id, String firstName, String AuthorsLname) {
+        this.id = id;
         this.lastName = AuthorsLname;
         this.firstName = firstName;
     }
 
+    public AuthorEntity(long id) {
+        this.id = id;
+    }
+
     public long getId() {
-        return Id;
+        return id;
     }
 
-    public void setId(Integer id) {
-        Id = id;
-    }
-
-    public AuthorEntity(Integer id) {
-        Id = id;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getFirstName() {

@@ -1,6 +1,13 @@
 package pl.sdacademy.bookstore.repository;
-/* By IM */
-/*Category CRUD*/
+
+/**
+ * A class that that collects methods that allows to access CategoryEntity
+ *
+ * <p>An <code>CategoryRepository</code> instance is supposed to be a set
+ * of methods created to provide an access to CategoryEntity
+ *
+ * @author Irek Marszałek
+ */
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -61,8 +68,19 @@ public class CategoryRepository {
   }
 
   @Transactional
-  public void truncate(){
-    entityManager.createNativeQuery("truncate table category")
-            .executeUpdate();
+  public List<CategoryEntity> findAllChildren(long id){
+    return entityManager
+            .createQuery("select c from category c where c.parentCategory.id = :id", CategoryEntity.class)
+            .setParameter("id", id)
+            .getResultList();
+  }
+
+  @Transactional
+  public int countChildren(long id){
+    return entityManager
+            .createQuery("select count(c) from category c where c.parentCategory.id = :id", Long.class)
+            .setParameter("id",id)
+            .getSingleResult()
+            .intValue();
   }
 }

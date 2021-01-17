@@ -10,7 +10,7 @@ import pl.sdacademy.bookstore.model.OrderLine;
 import java.util.ArrayList;
 
 @Service
-public class CartService {
+public class CartService  implements ICartService {
     private final CartCache cartCache;
 
     public CartService(CartCache cartCache) {
@@ -67,6 +67,11 @@ public class CartService {
         validateCart(cookie);
         Cart cart = cartCache.getCart(cookie);
         return cart.getListofProducts();
+    }
+
+    @Override
+    public void clean() {
+        // implementacja realizowana przez K
     }
 
 }
