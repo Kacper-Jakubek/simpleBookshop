@@ -1,54 +1,98 @@
 package pl.sdacademy.bookstore.db;
 
-import javax.persistence.*;
 
-// FIXME: when table user is ready
-//@Entity
-//@Table(name = "user")
-public class UserEntity {
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.util.Collection;
+import java.util.Collections;
+
+@Entity(name = "User")
+public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String password;
+    private String role;
+    private boolean isEnabled;
 
-    // FIXME: uncomment when Person table is ready
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "person_id", referencedColumnName = "id")
-//    private PersonEntity person;
-    private boolean isAdmin;
-    private boolean isActive;
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
 
-    public String getUsername() {
-        return username;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
+    public String getRole() {
+        return role;
     }
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public boolean isActive() {
-        return isActive;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton(new SimpleGrantedAuthority(role));
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    @Override
+    public String toString() {
+        return "AppUser{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                '}';
     }
 }
