@@ -3,7 +3,6 @@ package pl.sdacademy.bookstore.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import pl.sdacademy.bookstore.dto.ProductDTO;
 import pl.sdacademy.bookstore.model.OrderLine;
@@ -46,7 +45,7 @@ public class CartController {
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @PutMapping()
+    @PutMapping("/increase")
     public String increaseQuantity(@CookieValue(value = "sessionID")String sessionID, @RequestBody ProductDTO productDTO) {
     cartService.increaseQuantity(productDTO,sessionID);
     LOG.info("changed quantity of {}", productDTO.getName());
@@ -54,7 +53,7 @@ public class CartController {
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @PutMapping()
+    @PutMapping("/decrease")
     public String decreaseQuantity(@CookieValue(value = "sessionID")String sessionID, @RequestBody ProductDTO productDTO) {
     cartService.decreaseQuantity(productDTO,sessionID);
     LOG.info("changed quantity of {}", productDTO.getName());

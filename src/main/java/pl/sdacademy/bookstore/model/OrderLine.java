@@ -4,7 +4,7 @@ import pl.sdacademy.bookstore.dto.ProductDTO;
 
 public class OrderLine {
     private int id;
-    private final ProductDTO productDTO;
+    private ProductDTO productDTO;
     private int quantity;
     private double price;
     private double netWorth;
@@ -45,5 +45,9 @@ public class OrderLine {
         this.quantity = quantity;
         this.price = price;
         this.netWorth = netWorth;
+    }
+
+    public OrderLine() {
+
     }
 }

@@ -10,12 +10,11 @@ import pl.sdacademy.bookstore.model.OrderLine;
 public interface OrderLineMapper {
     OrderLineMapper INSTANCE = Mappers.getMapper( OrderLineMapper.class );
 
-    OrderLineEntity OrderLineEntity(OrderLine orderLine, OrderLineEntity orderLineEntity);
-
     @Mapping(source = "id", target = "id")
     @Mapping(source = "product", target = "bookName")
     @Mapping(source = "price", target = "price")
     @Mapping(ignore = true, target = "createOrderLine")
     OrderLineEntity mapToOrderLineEntity(OrderLine orderLine);
+
 
 }
