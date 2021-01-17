@@ -19,4 +19,14 @@ spring:
         format_sql: true
   liquibase:
     change-log: classpath:db/change-log.xml
-
+  mail:
+    host: smtp.gmail.com
+    username: zdjavapol9@gmail.com
+    password: Zdjavapol9!@
+    port: 587
+    test-connection: true
+#    properties:
+#      mail.transport.protocol: smtp
+#      mail.smtp.port: 587
+#      mail.smtp.auth: true
+#      mail.smtp.starttls.enable: true

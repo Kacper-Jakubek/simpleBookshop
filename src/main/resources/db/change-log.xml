@@ -97,5 +97,26 @@
     <changeSet id="init-db-20210116" author="Anna Ksiazek">
         <modifyDataType tableName="product" columnName="product_price" newDataType="currency" />
     </changeSet>
-
+    <changeSet id="init-db-20210115_1340" author="Piotr Lisowski">
+        <createTable tableName="user">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="is_enabled" type="BOOLEAN NOT NULL"/>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="role" type="VARCHAR(255)"/>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="init-db-20210115_1440" author="Piotr Lisowski">
+        <createTable tableName="token">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="value" type="VARCHAR(255)"/>
+            <column name="user_entity_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
