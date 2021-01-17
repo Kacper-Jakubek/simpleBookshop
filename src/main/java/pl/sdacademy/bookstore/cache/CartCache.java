@@ -14,7 +14,6 @@ public class CartCache {
     private String sessionID;
 
 
-
     public boolean storeCart(Cart cart, String sessionID){
         cartsInMemory.put(sessionID,cart);
         return cartsInMemory.get(sessionID).equals(cart);
