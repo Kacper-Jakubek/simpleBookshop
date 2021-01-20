@@ -44,7 +44,7 @@ class ProductEntityTest {
         ProductEntity productEntity = new ProductEntity();
         productEntity.setTitle("Wiedźmin");
         productEntity.setDescription("świetna książka o przygodach wiedźmina");
-        BigDecimal price = new BigDecimal("40,99"); // czy to tak trzeba?
+        BigDecimal price = new BigDecimal(40.99); // czy to tak trzeba?
         productEntity.setPrice(price);
         productEntity.setAvailable(true);
         productEntity.setMiniature("https://allegro.pl/oferta/saga-wiedzmin-pakiet-8-tomow-sapkowski-opr-gra-8788126431");

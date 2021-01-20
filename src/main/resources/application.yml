@@ -20,7 +20,6 @@ spring:
   liquibase:
     change-log: classpath:db/change-log.xml
 
-bookstore:
-    cart:
-      clean-timeout: 5000
-
+cache:
+    carts:
+      clean-timeout: 300000

@@ -1,13 +1,14 @@
 package pl.sdacademy.bookstore.mapper;
 
 import org.junit.jupiter.api.Test;
+import pl.sdacademy.bookstore.db.OrderLineEntity;
 import pl.sdacademy.bookstore.dto.ProductDTO;
-import pl.sdacademy.bookstore.dto.ShoppingCart;
 import pl.sdacademy.bookstore.model.OrderLine;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class OrderLineMapperTest {
+
     @Test
     public void shouldMapOrderLineToDto() {
         //given
@@ -16,12 +17,12 @@ class OrderLineMapperTest {
         OrderLine orderLine = new OrderLine(1, productDTO1,2,50,50);
 
         //when
-        ShoppingCart shoppingCart = OrderLineMapper.INSTANCE.mapToOrderLineDTO( orderLine );
+        OrderLineEntity orderLineEntity = OrderLineMapper.INSTANCE.mapToOrderLineEntity((OrderLine) orderLine);
 
         //then
-        assertThat( shoppingCart ).isNotNull();
-        assertThat( shoppingCart.getBookName() ).isEqualTo( "Mappers are good" );
-        assertThat( shoppingCart.getHowMany() ).isEqualTo( 2 );
-        assertThat( shoppingCart.getBookPrice() ).isEqualTo( 50 );
+        assertThat( orderLineEntity ).isNotNull();
+        assertThat( orderLineEntity.getBookName() ).isEqualTo( "Mappers are good" );
+        assertThat( orderLineEntity.getQuantity() ).isEqualTo( 2 );
+        assertThat( orderLineEntity.getPrice() ).isEqualTo( 50 );
     }
 }

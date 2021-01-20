@@ -4,14 +4,12 @@ import pl.sdacademy.bookstore.dto.ProductDTO;
 
 public class OrderLine {
     private int id;
-    private final ProductDTO productDTO;
+    private ProductDTO productDTO;
     private int quantity;
-    private final double price;
+    private double price;
     private double netWorth;
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
 
     public void setId(int id) {
         this.id = id;
@@ -29,9 +27,9 @@ public class OrderLine {
         this.quantity = quantity;
     }
 
-    public double getPrice() {
-        return price;
-    }
+    public double getPrice() { return price; }
+
+    public void setPrice(double price) {this.price = price; }
 
     public double getNetWorth() {
         return netWorth;
@@ -47,5 +45,9 @@ public class OrderLine {
         this.quantity = quantity;
         this.price = price;
         this.netWorth = netWorth;
+    }
+
+    public OrderLine() {
+
     }
 }
