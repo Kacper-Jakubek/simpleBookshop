@@ -27,7 +27,7 @@ class CategoryServiceWithMockTest {
           PARENT_CATEGORY_ID
           , PARENT_CATEGORY_NAME
           , PARENT_CATEGORY_PARENT
-          , true);
+          , false);
 
   private static final long CATEGORY_ID = 2;
   private static final String CATEGORY_NAME = "Horror";
@@ -44,6 +44,14 @@ class CategoryServiceWithMockTest {
           , CATEGORY_WITH_EMPTY_NAME_NAME
           , CATEGORY_WITH_EMPTY_NAME_PARENT_CATEGORY
           ,true);
+
+  private static final long CATEGORY_WITH_FALSE_LEAF_ID = 4;
+  private static final String CATEGORY_WITH_FALSE_LEAF_NAME = "Informatyczne";
+  private static final CategoryEntity CATEGORY_WITH_FALSE_LEAF_PARENT_CATEGORY = null;
+  private static final CategoryEntity CATEGORY_WITH_FALSE_LEAF = new CategoryEntity(CATEGORY_WITH_FALSE_LEAF_ID
+          , CATEGORY_WITH_FALSE_LEAF_NAME
+          , CATEGORY_WITH_FALSE_LEAF_PARENT_CATEGORY
+          ,false);
 
 
   CategoryMapper categoryMapper = Mappers.getMapper(CategoryMapper.class);
@@ -101,58 +109,80 @@ class CategoryServiceWithMockTest {
             .withNoCause();
   }
 
+  /**
+   * Trying to add category with false leaf
+   * Should return one error messages
+   */
+  @Test
+  void shouldReturnErrorMsgCategoryLeafCannotBeFalse(){
+    ///given
+    List<String> errorMessages = new ArrayList<>();
+    errorMessages.add("Category leaf cannot be false");
+
+    //when
+    when(categoryValidationAddNew.checkCategory(any())).thenReturn(errorMessages);
+
+    // then
+    assertThatIllegalArgumentException()
+            .isThrownBy(()->categoryService.addCategory(categoryMapper.map(CATEGORY_WITH_FALSE_LEAF)))
+            .withMessage("[Category leaf cannot be false]")
+            .withNoCause();
+  }
+
+  /**
+   * Creates new category with parent category null
+   */
   @Test
   void shouldAddNewCategory() {
-    when(categoryRepository.save(any())).thenReturn(CATEGORY_ENTITY);
-    Category saved = categoryService.addCategory(categoryMapper.map(CATEGORY_ENTITY));
+    //when
+    when(categoryRepository.save(any())).thenReturn(PARENT_CATEGORY);
+    Category saved = categoryService.addCategory(categoryMapper.map(PARENT_CATEGORY));
 
-    assertThat(saved.getId()).isEqualTo(CATEGORY_ENTITY.getId());
-    verify(categoryRepository).save(any());
-    verifyNoMoreInteractions(categoryRepository);
-  }
-
-  @Test
-  void shouldChangeExistingCategory() {
-    when(categoryRepository.save(any())).thenReturn(CATEGORY_ENTITY);
-    Category saved = categoryService.addCategory(categoryMapper.map(CATEGORY_ENTITY));
-
-    CATEGORY_ENTITY.setLeaf(true);
-    CATEGORY_ENTITY.setName("Horrory");
-    CATEGORY_ENTITY.setParentCategory(null);
-
-    when(categoryRepository.update(any())).thenReturn(CATEGORY_ENTITY);
-    Category updated = categoryService.changeCategory(saved);
-
-    assertThat(updated.getId()).isEqualTo(CATEGORY_ENTITY.getId());
-    assertThat(updated.getName()).isEqualTo(CATEGORY_ENTITY.getName());
-    assertThat(updated.isLeaf()).isEqualTo(CATEGORY_ENTITY.isLeaf());
-    assertThat(updated.getParentCategory()).isNull();
-
-    verify(categoryRepository).save(any());
-    verify(categoryRepository).update(any());
-
-    verifyNoMoreInteractions(categoryRepository);
-  }
-
-  @Test
-  void shouldDeleteCategory(){
-    when(categoryRepository.save(any())).thenReturn(CATEGORY_ENTITY);
-    Category saved = categoryService.addCategory(categoryMapper.map(CATEGORY_ENTITY));
-
-    doNothing().when(categoryRepository).delete(any());
-    categoryService.deleteCategory(saved);
     long savedId = saved.getId();
+    when(categoryRepository.getById(savedId)).thenReturn(Optional.of(PARENT_CATEGORY));
+    Category found = categoryService.findById(savedId).orElse(null);
 
-    when(categoryRepository.getById(savedId)).thenReturn(Optional.empty());
-    Optional<Category> found = categoryService.findById(savedId);
-
-    assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(()->found.orElseThrow(NoSuchElementException::new));
-
+    //then
+    assertThat(found).isNotNull();
+    assertThat(found.getId()).isEqualTo(PARENT_CATEGORY.getId());
+    assertThat(found.getName()).isEqualTo(PARENT_CATEGORY.getName());
+    assertThat(found.getParentCategory()).isNull();
+    assertThat(found.isLeaf()).isFalse();
     verify(categoryRepository).save(any());
-    verify(categoryRepository).delete(any());
     verify(categoryRepository).getById(savedId);
-
     verifyNoMoreInteractions(categoryRepository);
+  }
+
+  /**
+   * Creates new category with parent category
+   * While adding it should set parent leaf to false
+   */
+  @Test
+  void shouldAddNewCategoryAndSetUpParentCategoryLeafToFalse() {
+    //when
+    when(categoryRepository.save(any())).thenReturn(PARENT_CATEGORY);
+    Category parentCategorySaved = categoryService.addCategory(categoryMapper.map(PARENT_CATEGORY));
+    long parentCategorySavedId = parentCategorySaved.getId();
+
+    when(categoryRepository.getById(parentCategorySavedId)).thenReturn(Optional.of(PARENT_CATEGORY));
+    Category foundedParentCategory = categoryService.findById(parentCategorySavedId).orElse(null);
+
+    when(categoryRepository.save(any())).thenReturn(CATEGORY_ENTITY);
+    Category saved = categoryService.addCategory(categoryMapper.map(CATEGORY_ENTITY));
+    long savedID = saved.getId();
+
+    when(categoryRepository.getById(savedID)).thenReturn(Optional.of(CATEGORY_ENTITY));
+    Category found = categoryService.findById(savedID).orElse(null);
+
+    //then
+    assertThat(found).isNotNull();
+    assertThat(saved.getId()).isEqualTo(found.getId());
+    assertThat(saved.getName()).isEqualTo(found.getName());
+    assertThat(saved.isLeaf()).isEqualTo(found.isLeaf());
+    assertThat(saved.getParentCategory().getId()).isEqualTo(found.getParentCategory().getId());
+
+    assertThat(foundedParentCategory).isNotNull();
+    assertThat(foundedParentCategory.isLeaf()).isFalse();
   }
 
   @Test
