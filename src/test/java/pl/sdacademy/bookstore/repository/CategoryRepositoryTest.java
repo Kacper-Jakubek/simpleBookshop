@@ -113,7 +113,8 @@ class CategoryRepositoryTest {
 
     Optional<CategoryEntity> found = categoryRepository.getById(savedId);
 
-    assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(()->found.orElseThrow(NoSuchElementException::new));
+    assertThatExceptionOfType(NoSuchElementException.class)
+            .isThrownBy(()->found.orElseThrow(NoSuchElementException::new));
   }
 
   @Test
@@ -127,7 +128,8 @@ class CategoryRepositoryTest {
     categoryRepository.deleteById(savedId);
     Optional<CategoryEntity> found = categoryRepository.getById(savedId);
 
-    assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(()->found.orElseThrow(NoSuchElementException::new));
+    assertThatExceptionOfType(NoSuchElementException.class)
+            .isThrownBy(()->found.orElseThrow(NoSuchElementException::new));
   }
 
   @Test

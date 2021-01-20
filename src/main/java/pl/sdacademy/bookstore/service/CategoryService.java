@@ -15,6 +15,8 @@ import pl.sdacademy.bookstore.db.CategoryEntity;
 import pl.sdacademy.bookstore.model.Category;
 import pl.sdacademy.bookstore.mapper.CategoryMapper;
 import pl.sdacademy.bookstore.repository.CategoryRepository;
+import pl.sdacademy.bookstore.service.validation.CategoryValidationAddNew;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -22,23 +24,40 @@ import java.util.Optional;
 public class CategoryService {
   CategoryMapper categoryMapper = Mappers.getMapper(CategoryMapper.class);
   CategoryRepository categoryRepository;
+  CategoryValidationAddNew categoryValidationAddNew;
 
   @Autowired
-  public CategoryService(CategoryRepository categoryRepository) {
+  public CategoryService(CategoryRepository categoryRepository, CategoryValidationAddNew categoryValidationAddNew) {
     this.categoryRepository = categoryRepository;
+    this.categoryValidationAddNew = categoryValidationAddNew;
   }
 
   /**
    * Add a new category.
+   * Validate if category can be added
+   * In case parent is added it modifies also leaf in parent category. It set leaf to false.
    * @param category DTO instance
    * @return newly added DTO category
    *
    */
   public Category addCategory(Category category){
-    //TODO: dorób validację dodawania kategorii
-    CategoryEntity categoryEntity = categoryMapper.map(category);
-    CategoryEntity saveCategory = categoryRepository.save(categoryEntity);
-    return categoryMapper.map(saveCategory);
+    List<String> validationErrorMessages = categoryValidationAddNew.checkCategory(category);
+
+    if (validationErrorMessages.isEmpty()){
+      CategoryEntity categoryEntity = categoryMapper.map(category);
+      CategoryEntity savedCategory = categoryRepository.save(categoryEntity);
+
+      //if parent is assigned then update parent category leaf to false
+      if(category.getParentCategory() != null){
+          //TODO: add changing category validation
+          Category parentCategory = category.getParentCategory();
+          parentCategory.setLeaf(false);
+          changeCategory(parentCategory);
+      }
+      return categoryMapper.map(savedCategory);
+    }else {
+      throw new IllegalArgumentException(validationErrorMessages.toString());
+    }
   }
 
   /**

@@ -7,14 +7,14 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CategoryValidationTest {
+class CategoryValidationAddNewTest {
 
   Category category = new Category();
-  CategoryValidation categoryValidation = new CategoryValidation();
+  CategoryValidationAddNew categoryValidationAddNew = new CategoryValidationAddNew();
 
   @Test
   void shouldReturnOneMessageCategoryCannotBeNull() {
-    List<String> errorMessages = categoryValidation.checkIfNewNameIsCorrect(null);
+    List<String> errorMessages = categoryValidationAddNew.checkName(null);
     assertThat(errorMessages).isNotEmpty();
     assertThat(errorMessages.size()).isEqualTo(1);
     assertThat(errorMessages.get(0)).isEqualTo("Category cannot be null");
@@ -22,7 +22,7 @@ class CategoryValidationTest {
 
   @Test
   void shouldReturnOneMessageCategoryNameCannotBeNull() {
-    List<String> errorMessages = categoryValidation.checkIfNewNameIsCorrect(category);
+    List<String> errorMessages = categoryValidationAddNew.checkName(category);
     assertThat(errorMessages).isNotEmpty();
     assertThat(errorMessages.size()).isEqualTo(1);
     assertThat(errorMessages.get(0)).isEqualTo("Category name cannot be null");
@@ -31,18 +31,19 @@ class CategoryValidationTest {
   @Test
   void shouldReturnOneMessageCategoryNameCannotBeShorterThan3Chars() {
     category.setName("12");
-    List<String> errorMessages = categoryValidation.checkIfNewNameIsCorrect(category);
+    List<String> errorMessages = categoryValidationAddNew.checkName(category);
     assertThat(errorMessages).isNotEmpty();
     assertThat(errorMessages.size()).isEqualTo(1);
     assertThat(errorMessages.get(0)).isEqualTo("Category name cannot be shorter than 3 chars");
   }
 
   @Test
-  void shouldReturnOneMessageParentCategoryCannotBeNull() {
-    List<String> errorMessages = categoryValidation.checkIfParentCategoryIsCorrect(category);
+  void shouldReturnMessageLeafCannotBeFalse() {
+    category.setName("12");
+    List<String> errorMessages = categoryValidationAddNew.checkLeaf(category);
     assertThat(errorMessages).isNotEmpty();
     assertThat(errorMessages.size()).isEqualTo(1);
-    assertThat(errorMessages.get(0)).isEqualTo("Category parent cannot be null");
+    assertThat(errorMessages.get(0)).isEqualTo("Category leaf cannot be false");
   }
 
   @Test
@@ -50,7 +51,8 @@ class CategoryValidationTest {
     category.setId(1);
     category.setName("Name");
     category.setParentCategory(category);
-    List<String> errorMessages = categoryValidation.checkIfCanBeCreated(category);
+    category.setLeaf(true);
+    List<String> errorMessages = categoryValidationAddNew.checkCategory(category);
 
     assertThat(errorMessages).isEmpty();
   }

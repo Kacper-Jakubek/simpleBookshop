@@ -12,16 +12,19 @@ package pl.sdacademy.bookstore.db;
 import javax.persistence.*;
 
 @Entity(name = "category")
+
 public class CategoryEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
   private String name;
+
   @ManyToOne
   private CategoryEntity parentCategory;
+
   boolean leaf;
 
-  public CategoryEntity(long id, String name, CategoryEntity parentCategory, boolean leaf) {
+  public CategoryEntity(long id, String name, CategoryEntity parentCategory, Boolean leaf) {
     this.id = id;
     this.name = name;
     this.parentCategory = parentCategory;
@@ -55,7 +58,7 @@ public class CategoryEntity {
     this.parentCategory = parentCategory;
   }
 
-  public boolean isLeaf() {
+  public Boolean isLeaf() {
     return leaf;
   }
 
