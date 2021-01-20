@@ -2,16 +2,16 @@ package pl.sdacademy.bookstore.db;
 
 import javax.persistence.*;
 
-@Entity(name = "order")
+//@Entity(name = "order")
 public class OrderLineEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@Id
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int quantity;
     private double price;
     private String bookName;
-    @ManyToOne
+    //@ManyToOne
     private OrderLineEntity createOrderLine;
 
 

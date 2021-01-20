@@ -7,17 +7,19 @@ import org.springframework.web.bind.annotation.*;
 import pl.sdacademy.bookstore.dto.ProductDTO;
 import pl.sdacademy.bookstore.model.OrderLine;
 import pl.sdacademy.bookstore.service.CartService;
+import pl.sdacademy.bookstore.service.ICartService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
+@RequestMapping("/cart")
 public class CartController {
     private static final Logger LOG = LoggerFactory.getLogger(CartController.class);
-    private final CartService cartService;
+    private final ICartService cartService;
 
-    public CartController(CartService cartService) {
+    public CartController(ICartService cartService) {
         this.cartService = cartService;
     }
 

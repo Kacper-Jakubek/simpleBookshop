@@ -7,22 +7,30 @@ import pl.sdacademy.bookstore.dto.ProductDTO;
 import pl.sdacademy.bookstore.model.Cart;
 import pl.sdacademy.bookstore.model.OrderLine;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 @Service
-public class CartService  implements ICartService {
+public class CartService implements ICartService{
     private final CartCache cartCache;
 
     public CartService(CartCache cartCache) {
         this.cartCache = cartCache;
     }
+
+
+    @Override
     public void validateCart(String cookie){
         if(!cartCache.checkIfCartExist(cookie)){
-            Cart cart = new Cart();
+            LocalTime creationTime = LocalTime.now();
+            Cart cart = new Cart(creationTime);
             cartCache.storeCart(cart,cookie);
         }
     }
 
+    @Override
     public OrderLine add(ProductDTO productDTO, String cookie){
         validateCart(cookie);
         OrderLine orderLine = new OrderLine(cartCache.getNextId(),productDTO,1,productDTO.getPrice(),productDTO.getPrice());
@@ -30,6 +38,7 @@ public class CartService  implements ICartService {
         return orderLine;
     }
 
+    @Override
     public OrderLine increaseQuantity(ProductDTO productDTO, String cookie){
         validateCart(cookie);
         OrderLine orderLine = cartCache.getOrderLine(cookie,productDTO);
@@ -39,6 +48,7 @@ public class CartService  implements ICartService {
         return orderLine;
     }
 
+    @Override
     public OrderLine decreaseQuantity(ProductDTO productDTO, String cookie){
         validateCart(cookie);
         OrderLine orderLine = cartCache.getOrderLine(cookie,productDTO);
@@ -53,6 +63,7 @@ public class CartService  implements ICartService {
         }
     }
 
+    @Override
     public boolean delete(ProductDTO productDTO, String cookie){
         validateCart(cookie);
         OrderLine orderLine = cartCache.getOrderLine(cookie,productDTO);
@@ -63,6 +74,8 @@ public class CartService  implements ICartService {
             return false;
         }
     }
+
+    @Override
     public ArrayList<OrderLine> findAllProducts(String cookie){
         validateCart(cookie);
         Cart cart = cartCache.getCart(cookie);
@@ -70,8 +83,19 @@ public class CartService  implements ICartService {
     }
 
     @Override
-    public void clean() {
-        // implementacja realizowana przez K
-    }
+    public int clean() {
+        Map<String, Cart> carts = cartCache.getCartsInMemory();
+        Iterator<Cart> it = carts.values().iterator();
+        int counter = 0;
 
+        while (it.hasNext())
+        {
+            LocalTime cleaningTime = it.next().getDeleteTime();
+            if (cleaningTime.isBefore(LocalTime.now())){
+                it.remove();
+                counter++;
+            }
+        }
+        return counter;
+    }
 }

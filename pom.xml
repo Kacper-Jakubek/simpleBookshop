@@ -11,8 +11,8 @@
 	<groupId>pl.sdacademy</groupId>
 	<artifactId>simple-bookstore</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ssimple-bookstore</name>
-	<description>SDA projekt praktyczny</description>
+	<name>simple-bookstore</name>
+	<description>projekt praktyczny</description>
 
 	<properties>
 		<java.version>11</java.version>

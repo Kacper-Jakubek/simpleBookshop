@@ -3,13 +3,13 @@ package pl.sdacademy.bookstore.dto;
 public class ProductDTO {
 
     private String name;
-    private Integer price;
+    private Double price;
 
-    public Integer getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

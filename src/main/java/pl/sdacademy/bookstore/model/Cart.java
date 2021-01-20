@@ -1,12 +1,25 @@
 package pl.sdacademy.bookstore.model;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class Cart {
 private ArrayList<OrderLine> ListofProducts = new ArrayList<>();
+private LocalTime creationTime;
+
+    public Cart() {
+    }
+
+    public Cart(LocalTime creationTime) {
+        this.creationTime = creationTime;
+    }
 
     public ArrayList<OrderLine> getListofProducts() {
         return ListofProducts;
+    }
+
+    public LocalTime getCreationTime() {
+        return creationTime;
     }
 
     public ArrayList<OrderLine> addProduct(OrderLine orderLine){
@@ -31,5 +44,7 @@ private ArrayList<OrderLine> ListofProducts = new ArrayList<>();
      int index = ListofProducts.indexOf(orderLine);
      return ListofProducts.size()>index+1;
  }
-
+public LocalTime getDeleteTime(){
+       return getCreationTime().plusHours(48L);
+}
 }

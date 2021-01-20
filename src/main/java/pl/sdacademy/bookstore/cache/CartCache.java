@@ -18,6 +18,10 @@ public class CartCache {
         cartsInMemory.put(sessionID,cart);
         return cartsInMemory.get(sessionID).equals(cart);
     }
+    public boolean removeCart(String sessionID){
+        cartsInMemory.remove(sessionID);
+        return cartsInMemory.get(sessionID) == null;
+    }
     public void addNewProductToCart(String userCookie, OrderLine product){
         Cart cart = cartsInMemory.get(userCookie);
         cart.addProduct(product);
@@ -58,5 +62,9 @@ public class CartCache {
     }
     public Cart getCart(String userCookie){
         return cartsInMemory.get(userCookie);
+    }
+
+    public Map<String, Cart> getCartsInMemory() {
+        return cartsInMemory;
     }
 }
