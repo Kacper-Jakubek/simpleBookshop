@@ -16,10 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import pl.sdacademy.bookstore.model.Category;
 import pl.sdacademy.bookstore.repository.CategoryRepository;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 @SpringBootTest
 class CategoryServiceTest {
