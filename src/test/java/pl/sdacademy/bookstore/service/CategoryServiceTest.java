@@ -103,10 +103,14 @@ class CategoryServiceTest {
     Category found = categoryService.findById(savedID).orElse(null);
 
     //then
-    assertThat(found).isNotNull();
-    assertThat(saved.getId()).isEqualTo(found.getId());
-    assertThat(saved.getName()).isEqualTo(found.getName());
-    assertThat(saved.isLeaf()).isEqualTo(found.isLeaf());
+    assertThat(found)
+            .isNotNull();
+    assertThat(saved.getId())
+            .isEqualTo(found.getId());
+    assertThat(saved.getName())
+            .isEqualTo(found.getName());
+    assertThat(saved.isLeaf())
+            .isEqualTo(found.isLeaf());
   }
 
   /**
@@ -136,13 +140,20 @@ class CategoryServiceTest {
     Category foundedParentCategory = categoryService.findById(parentCategorySavedId).orElse(null);
 
     //then
-    assertThat(found).isNotNull();
-    assertThat(saved.getId()).isEqualTo(found.getId());
-    assertThat(saved.getName()).isEqualTo(found.getName());
-    assertThat(saved.isLeaf()).isEqualTo(found.isLeaf());
-    assertThat(saved.getParentCategory().getId()).isEqualTo(found.getParentCategory().getId());
+    assertThat(found)
+            .isNotNull();
+    assertThat(saved.getId())
+            .isEqualTo(found.getId());
+    assertThat(saved.getName())
+            .isEqualTo(found.getName());
+    assertThat(saved.isLeaf())
+            .isEqualTo(found.isLeaf());
+    assertThat(saved.getParentCategory().getId())
+            .isEqualTo(found.getParentCategory().getId());
 
-    assertThat(foundedParentCategory).isNotNull();
-    assertThat(foundedParentCategory.isLeaf()).isFalse();
+    assertThat(foundedParentCategory)
+            .isNotNull();
+    assertThat(foundedParentCategory.isLeaf())
+            .isFalse();
   }
 }

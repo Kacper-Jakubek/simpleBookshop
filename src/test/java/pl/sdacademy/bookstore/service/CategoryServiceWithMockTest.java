@@ -184,38 +184,45 @@ class CategoryServiceWithMockTest {
     assertThat(foundedParentCategory).isNotNull();
     assertThat(foundedParentCategory.isLeaf()).isFalse();
   }
-
+  /**
+   * Looking for children of parent category
+   */
   @Test
-  void shouldFindTwoChildren(){
-    //TODO: Zmień nazwę metody.
+  void shouldFindOneChild(){
+    //when
     List<CategoryEntity> returnedCategories = new ArrayList<>();
     returnedCategories.add(CATEGORY_ENTITY);
-
     when(categoryRepository.findAllChildren(PARENT_CATEGORY_ID)).thenReturn(returnedCategories);
-
     List<Category> foundedCategories = categoryService.findChildren(PARENT_CATEGORY.getId());
+
+    //then
     assertThat(foundedCategories.size()).isEqualTo(1);
   }
 
+  /**
+   * Looking for children of parent category
+   */
   @Test
   void shouldReturnEmptyChildrenList(){
-    when(categoryRepository.save(any())).thenReturn(PARENT_CATEGORY);
-    Category parentSaved = categoryService.addCategory(categoryMapper.map(PARENT_CATEGORY));
-
-    long parentSavedId = parentSaved.getId();
+    //when
     List<CategoryEntity> returnedCategories = new ArrayList<>();
+    when(categoryRepository.findAllChildren(PARENT_CATEGORY.getId())).thenReturn(returnedCategories);
 
-    when(categoryRepository.findAllChildren(parentSavedId)).thenReturn(returnedCategories);
-
+    //then
     List<Category> foundedCategories = categoryService.findChildren(PARENT_CATEGORY.getId());
     assertThat(foundedCategories).isEmpty();
   }
 
+  /**
+   * Counting children of parent category
+   */
   @Test
   void shouldCountOneChildren(){
+    //when
     when(categoryRepository.countChildren(PARENT_CATEGORY_ID)).thenReturn(1);
     int countedChildren = categoryService.countChildren(PARENT_CATEGORY_ID);
 
+    //then
     assertThat(countedChildren).isEqualTo(1);
   }
 }

@@ -30,51 +30,84 @@ class CategoryRepositoryTest {
   @Autowired
   private CategoryRepository categoryRepository;
 
+  /**
+   * Clear category table before each test
+   */
   @BeforeEach
   void clearBeforeEach(){
     categoryRepository.deleteAll();
   }
 
+  /**
+   * It inserts new category
+   */
   @Test
   void shouldSaveNewCategory() {
+    //given
     CategoryEntity categoryEntity = new CategoryEntity();
     categoryEntity.setName("Fantasy");
-    categoryEntity.setLeaf(false);
+    categoryEntity.setParentCategory(null);
+    categoryEntity.setLeaf(true);
+
+    //when
     CategoryEntity saved = categoryRepository.save(categoryEntity);
-
     long foundId = saved.getId();
-
     CategoryEntity found = categoryRepository.getById(foundId).orElse(new CategoryEntity());
-    assertThat(categoryEntity.getId()).isEqualTo(found.getId());
-    assertThat(categoryEntity.getName()).isEqualTo(found.getName());
-    assertThat(categoryEntity.isLeaf()).isEqualTo(found.isLeaf());
-    assertThat(categoryEntity.getParentCategory()).isNull();
+
+    //then
+    assertThat(categoryEntity.getId())
+            .isEqualTo(found.getId());
+    assertThat(categoryEntity.getName())
+            .isEqualTo(found.getName());
+    assertThat(categoryEntity.isLeaf())
+            .isEqualTo(found.isLeaf());
+    assertThat(found.getParentCategory())
+            .isNull();
   }
 
+  /**
+   * It makes an update of existing category
+   */
   @Test
   void shouldUpdateExistingCategoryWithParentCategory(){
+    //given
     CategoryEntity categoryEntityParent = new CategoryEntity();
     categoryEntityParent.setName("Książki");
+    categoryEntityParent.setParentCategory(null);
     categoryEntityParent.setLeaf(false);
     categoryRepository.save(categoryEntityParent);
 
     CategoryEntity categoryEntity = new CategoryEntity();
     categoryEntity.setName("Horror");
-    categoryEntity.setLeaf(false);
+    categoryEntity.setLeaf(true);
     categoryRepository.save(categoryEntity);
-
     categoryEntity.setParentCategory(categoryEntityParent);
-    categoryRepository.update(categoryEntity);
 
-    assertThat(categoryEntity.getParentCategory().getId()).isEqualTo(categoryEntityParent.getId());
-    assertThat(categoryEntity.getParentCategory().getName()).isEqualTo(categoryEntityParent.getName());
-    assertThat(categoryEntity.getParentCategory().isLeaf()).isEqualTo(categoryEntityParent.isLeaf());
+    //when
+    CategoryEntity updated = categoryRepository.update(categoryEntity);
+    long foundId = updated.getId();
+    CategoryEntity found = categoryRepository.getById(foundId).orElse(new CategoryEntity());
+
+    //then
+    assertThat(found.getId())
+            .isEqualTo(categoryEntity.getId());
+    assertThat(found.getName())
+            .isEqualTo(categoryEntity.getName());
+    assertThat(found.getParentCategory().getId())
+            .isEqualTo(categoryEntityParent.getId());
+    assertThat(found.isLeaf())
+            .isEqualTo(categoryEntity.isLeaf());
   }
 
+  /**
+   * It looks for all categories
+   */
   @Test
   void shouldFindTwoCategories() {
+    //given
     CategoryEntity categoryEntityParent = new CategoryEntity();
     categoryEntityParent.setName("Książki");
+    categoryEntityParent.setParentCategory(null);
     categoryEntityParent.setLeaf(false);
     categoryRepository.save(categoryEntityParent);
 
@@ -83,10 +116,8 @@ class CategoryRepositoryTest {
     categoryEntity.setLeaf(true);
     categoryRepository.save(categoryEntity);
 
+    //when
     List<CategoryEntity> categoryEntityList = categoryRepository.findAll();
-
-    assertNotNull(categoryEntityList);
-    assertThat(categoryEntityList.size()).isEqualTo(2);
 
     CategoryEntity found;
     if(categoryEntityList.get(0).getId() == categoryEntity.getId()){
@@ -95,50 +126,70 @@ class CategoryRepositoryTest {
       found = categoryEntityList.get(1);
     }
 
+    //then
+    assertNotNull(categoryEntityList);
+    assertThat(categoryEntityList.size())
+            .isEqualTo(2);
+
     assertNotNull(found);
     assertEquals(categoryEntity.getId(),found.getId());
     assertEquals(categoryEntity.getName(),found.getName());
     assertEquals(categoryEntity.isLeaf(),found.isLeaf());
   }
 
+  /**
+   * It deletes category by object
+   */
   @Test
   void shouldDeleteCategory() {
+    //given
     CategoryEntity categoryEntity = new CategoryEntity();
     categoryEntity.setName("Bibliografia");
-    categoryEntity.setLeaf(false);
+    categoryEntity.setLeaf(true);
     CategoryEntity saved = categoryRepository.save(categoryEntity);
 
+    //when
     categoryRepository.delete(saved);
     long savedId = saved.getId();
-
     Optional<CategoryEntity> found = categoryRepository.getById(savedId);
 
+    //then
     assertThatExceptionOfType(NoSuchElementException.class)
             .isThrownBy(()->found.orElseThrow(NoSuchElementException::new));
   }
 
+  /**
+   * It deletes category by id
+   */
   @Test
   void shouldDeleteCategoryById() {
+    //given
     CategoryEntity categoryEntity = new CategoryEntity();
     categoryEntity.setName("Bibliografia");
-    categoryEntity.setLeaf(false);
+    categoryEntity.setLeaf(true);
     CategoryEntity saved = categoryRepository.save(categoryEntity);
-
     long savedId = saved.getId();
+
+    //when
     categoryRepository.deleteById(savedId);
     Optional<CategoryEntity> found = categoryRepository.getById(savedId);
 
+    //then
     assertThatExceptionOfType(NoSuchElementException.class)
             .isThrownBy(()->found.orElseThrow(NoSuchElementException::new));
   }
 
+
+  /**
+   * It looks for a children of parent category
+   */
   @Test
   void shouldFindOneChild() {
+    //given
     CategoryEntity parentCategoryEntity = new CategoryEntity();
     parentCategoryEntity.setName("Książki");
     parentCategoryEntity.setLeaf(false);
     CategoryEntity parentSaved = categoryRepository.save(parentCategoryEntity);
-
     long parentSavedId = parentSaved.getId();
 
     CategoryEntity categoryEntity = new CategoryEntity();
@@ -146,46 +197,70 @@ class CategoryRepositoryTest {
     categoryEntity.setParentCategory(parentSaved);
     categoryEntity.setLeaf(true);
     categoryRepository.save(categoryEntity);
+
+    //when
     List<CategoryEntity> children = categoryRepository.findAllChildren(parentSavedId);
 
-    assertThat(children.size()).isEqualTo(1);
+    //then
+    assertThat(children.size())
+            .isEqualTo(1);
   }
 
+  /**
+   * It looks for a children of parent category
+   */
   @Test
   void shouldReturnEmptyChildrenList() {
+    //given
     CategoryEntity parentCategoryEntity = new CategoryEntity();
     parentCategoryEntity.setName("Książki");
-    parentCategoryEntity.setLeaf(false);
+    parentCategoryEntity.setLeaf(true);
     CategoryEntity parentSaved = categoryRepository.save(parentCategoryEntity);
-
     long parentSavedId = parentSaved.getId();
+
+    //when
     List<CategoryEntity> children = categoryRepository.findAllChildren(parentSavedId);
 
+    //then
     assertThat(children).isEmpty();
   }
 
+  /**
+   * It counts children of parent category
+   */
   @Test
   void shouldCountZeroChildren(){
+    //given, when
     int countedChildren = categoryRepository.countChildren(1);
-    assertThat(countedChildren).isZero();
+
+    //then
+    assertThat(countedChildren)
+            .isZero();
   }
 
+  /**
+   * It counts children of parent category
+   */
   @Test
   void shouldCountOneChild(){
+    //given
     CategoryEntity parentCategoryEntity = new CategoryEntity();
     parentCategoryEntity.setName("Root");
     parentCategoryEntity.setLeaf(false);
+    parentCategoryEntity.setParentCategory(null);
     CategoryEntity parentSaved = categoryRepository.save(parentCategoryEntity);
 
+    //when
     CategoryEntity categoryEntity = new CategoryEntity();
     categoryEntity.setName("Fantasy");
     categoryEntity.setLeaf(true);
     categoryEntity.setParentCategory(parentSaved);
     categoryRepository.save(categoryEntity);
-
     long parentCategoryId = parentCategoryEntity.getId();
 
+    //then
     int countedChildren = categoryRepository.countChildren(parentCategoryId);
-    assertThat(countedChildren).isEqualTo(1);
+    assertThat(countedChildren)
+            .isEqualTo(1);
   }
 }
