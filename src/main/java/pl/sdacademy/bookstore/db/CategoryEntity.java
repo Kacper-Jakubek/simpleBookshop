@@ -24,7 +24,7 @@ public class CategoryEntity {
 
   boolean leaf;
 
-  public CategoryEntity(long id, String name, CategoryEntity parentCategory, Boolean leaf) {
+  public CategoryEntity(long id, String name, CategoryEntity parentCategory, boolean leaf) {
     this.id = id;
     this.name = name;
     this.parentCategory = parentCategory;
